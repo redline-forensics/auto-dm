@@ -4,8 +4,6 @@ from PySide.QtGui import *
 
 
 class MainUI(QWidget):
-    job_tabs = {}
-
     def __init__(self):
         super(MainUI, self).__init__()
         self.init_ui()
