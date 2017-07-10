@@ -98,22 +98,30 @@ class TabPage(QWidget):
         # endregion
 
         # region SCENE
-        self.scene_vehicle = QPushButton("Vehicle Scan")
-        self.scene_site = QPushButton("Site Scan")
-        self.scene_copy_folder = QPushButton("Copy Files to Job Folder")
+        self.scene_vehicle_button = QPushButton("Vehicle Scan")
+        self.scene_vehicle_tool_button = QPushButton(
+            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/tool.png"), "")
+        self.scene_site_button = QPushButton("Site Scan")
+        self.scene_site_tool_Button = QPushButton(
+            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/tool.png"), "")
+        self.scene_copy_folder_button = QPushButton("Copy Files to Job Folder")
         # endregion
 
         # region Pix4D
-        self.pix4d_vehicle = QPushButton("Vehicle Drone")
-        self.pix4d_site = QPushButton("Site Drone")
-        self.pix4d_copy_folder = QPushButton("Copy Files to Job Folder")
+        self.pix4d_vehicle_button = QPushButton("Vehicle Drone Tool")
+        self.pix4d_vehicle_tool_button = QPushButton(
+            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/tool.png"), "")
+        self.pix4d_site_button = QPushButton("Site Drone Tool")
+        self.pix4d_site_tool_button = QPushButton(
+            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/tool.png"), "")
+        self.pix4d_copy_folder_button = QPushButton("Copy Files to Job Folder")
         # endregion
 
     def create_layout(self):
         main_layout = QHBoxLayout()
 
         first_column = QVBoxLayout()
-
+        # region Job Folders
         job_folders_group = QGroupBox("Job Folders")
         job_folders_layout = QGridLayout()
         job_folders_layout.addWidget(self.base_job_folder_edit, 0, 0)
@@ -126,7 +134,8 @@ class TabPage(QWidget):
         job_folders_layout.addWidget(self.drawings_folder_button, 3, 1)
         job_folders_group.setLayout(job_folders_layout)
         first_column.addWidget(job_folders_group)
-
+        # endregion
+        # region Job Controls
         job_controls_group = QGroupBox("Job Controls")
         job_controls_layout = QVBoxLayout()
         job_controls_layout.addWidget(self.open_job_folder_button)
@@ -134,27 +143,54 @@ class TabPage(QWidget):
         job_controls_layout.addWidget(self.add_to_open_air_button)
         job_controls_group.setLayout(job_controls_layout)
         first_column.addWidget(job_controls_group)
-
+        # endregion
         main_layout.addLayout(first_column)
 
         second_column = QVBoxLayout()
-
+        # region SCENE
         scene_group = QGroupBox("SCENE")
         scene_layout = QVBoxLayout()
-        scene_layout.addWidget(self.scene_vehicle)
-        scene_layout.addWidget(self.scene_site)
-        scene_layout.addWidget(self.scene_copy_folder)
+
+        scene_vehicle_layout = QHBoxLayout()
+        scene_vehicle_layout.addWidget(self.scene_vehicle_button)
+        scene_vehicle_layout.addWidget(self.scene_vehicle_tool_button)
+        scene_vehicle_layout.setStretch(0, 1)
+        scene_vehicle_layout.setStretch(1, 0)
+        scene_layout.addLayout(scene_vehicle_layout)
+
+        scene_site_layout = QHBoxLayout()
+        scene_site_layout.addWidget(self.scene_site_button)
+        scene_site_layout.addWidget(self.scene_site_tool_Button)
+        scene_site_layout.setStretch(0, 1)
+        scene_site_layout.setStretch(1, 0)
+        scene_layout.addLayout(scene_site_layout)
+
+        scene_layout.addWidget(self.scene_copy_folder_button)
         scene_group.setLayout(scene_layout)
         second_column.addWidget(scene_group)
-
+        # endregion
+        # region Pix4D
         pix4d_group = QGroupBox("Pix4D")
         pix4d_layout = QVBoxLayout()
-        pix4d_layout.addWidget(self.pix4d_vehicle)
-        pix4d_layout.addWidget(self.pix4d_site)
-        pix4d_layout.addWidget(self.pix4d_copy_folder)
+
+        pix4d_vehicle_layout = QHBoxLayout()
+        pix4d_vehicle_layout.addWidget(self.pix4d_vehicle_button)
+        pix4d_vehicle_layout.addWidget(self.pix4d_vehicle_tool_button)
+        pix4d_vehicle_layout.setStretch(0, 1)
+        pix4d_vehicle_layout.setStretch(1, 0)
+        pix4d_layout.addLayout(pix4d_vehicle_layout)
+
+        pix4d_site_layout = QHBoxLayout()
+        pix4d_site_layout.addWidget(self.pix4d_site_button)
+        pix4d_site_layout.addWidget(self.pix4d_site_tool_button)
+        pix4d_site_layout.setStretch(0, 1)
+        pix4d_site_layout.setStretch(1, 0)
+        pix4d_layout.addLayout(pix4d_site_layout)
+
+        pix4d_layout.addWidget(self.pix4d_copy_folder_button)
         pix4d_group.setLayout(pix4d_layout)
         second_column.addWidget(pix4d_group)
-
+        # endregion
         main_layout.addLayout(second_column)
 
         main_layout.setStretch(0, 1)
