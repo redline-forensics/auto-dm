@@ -94,11 +94,21 @@ class TabPage(QWidget):
         # region Job Controls
         self.open_job_folder_button = QPushButton("Open Job Folder")
         self.open_basecamp_page_button = QPushButton("Open Basecamp Page")
+        self.open_basecamp_page_button.setDisabled(True)
         self.add_to_open_air_button = QPushButton("Add to Open Air")
+        self.add_to_open_air_button.setDisabled(True)
+        # endregion
+
+        # region SCENE
+        self.scene_vehicle = QPushButton("Vehicle Scan")
+        self.scene_site = QPushButton("Site Scan")
+        self.scene_copy_folder = QPushButton("Copy Files to Job Folder")
         # endregion
 
     def create_layout(self):
-        main_layout = QGridLayout()
+        main_layout = QHBoxLayout()
+
+        first_column = QVBoxLayout()
 
         job_folders_group = QGroupBox("Job Folders")
         job_folders_layout = QGridLayout()
@@ -111,7 +121,7 @@ class TabPage(QWidget):
         job_folders_layout.addWidget(self.drawings_folder_edit, 3, 0)
         job_folders_layout.addWidget(self.drawings_folder_button, 3, 1)
         job_folders_group.setLayout(job_folders_layout)
-        main_layout.addWidget(job_folders_group, 0, 0)
+        first_column.addWidget(job_folders_group)
 
         job_controls_group = QGroupBox("Job Controls")
         job_controls_layout = QVBoxLayout()
@@ -119,7 +129,21 @@ class TabPage(QWidget):
         job_controls_layout.addWidget(self.open_basecamp_page_button)
         job_controls_layout.addWidget(self.add_to_open_air_button)
         job_controls_group.setLayout(job_controls_layout)
-        main_layout.addWidget(job_controls_group, 1, 0)
+        first_column.addWidget(job_controls_group)
+
+        main_layout.addLayout(first_column)
+
+        second_column = QVBoxLayout()
+
+        scene_group = QGroupBox("SCENE")
+        scene_layout = QVBoxLayout()
+        scene_layout.addWidget(self.scene_vehicle)
+        scene_layout.addWidget(self.scene_site)
+        scene_layout.addWidget(self.scene_copy_folder)
+        scene_group.setLayout(scene_layout)
+        second_column.addWidget(scene_group, 0, 1)
+
+        main_layout.addLayout(second_column)
 
         self.setLayout(main_layout)
 
