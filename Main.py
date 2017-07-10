@@ -105,6 +105,12 @@ class TabPage(QWidget):
         self.scene_copy_folder = QPushButton("Copy Files to Job Folder")
         # endregion
 
+        # region Pix4D
+        self.pix4d_vehicle = QPushButton("Vehicle Drone")
+        self.pix4d_site = QPushButton("Site Drone")
+        self.pix4d_copy_folder = QPushButton("Copy Files to Job Folder")
+        # endregion
+
     def create_layout(self):
         main_layout = QHBoxLayout()
 
@@ -141,7 +147,15 @@ class TabPage(QWidget):
         scene_layout.addWidget(self.scene_site)
         scene_layout.addWidget(self.scene_copy_folder)
         scene_group.setLayout(scene_layout)
-        second_column.addWidget(scene_group, 0, 1)
+        second_column.addWidget(scene_group)
+
+        pix4d_group = QGroupBox("Pix4D")
+        pix4d_layout = QVBoxLayout()
+        pix4d_layout.addWidget(self.pix4d_vehicle)
+        pix4d_layout.addWidget(self.pix4d_site)
+        pix4d_layout.addWidget(self.pix4d_copy_folder)
+        pix4d_group.setLayout(pix4d_layout)
+        second_column.addWidget(pix4d_group)
 
         main_layout.addLayout(second_column)
 
