@@ -157,6 +157,9 @@ class TabPage(QWidget):
 
         main_layout.addLayout(second_column)
 
+        main_layout.setStretch(0, 1)
+        main_layout.setStretch(1, 1)
+
         self.setLayout(main_layout)
 
 
