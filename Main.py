@@ -1,6 +1,7 @@
 import os.path
 import sys
 
+from PySide.QtCore import *
 from PySide.QtGui import *
 
 resource_path = os.path.join(os.path.split(__file__)[0], "resources")
@@ -10,9 +11,12 @@ icon_path = os.path.join(resource_path, "icons")
 class MainUI(QWidget):
     def __init__(self):
         super(MainUI, self).__init__()
+
         self.init_ui()
 
     def init_ui(self):
+        self.tray_icon = QSystemTrayIcon()
+
         self.create_controls()
         self.create_layout()
         self.make_connections()
@@ -44,6 +48,8 @@ class MainUI(QWidget):
         self.job_num_add_button.clicked.connect(self.add_job)
         self.jobs_tab_widget.tabCloseRequested.connect(self.remove_job)
 
+        self.tray_icon.activated.connect(self.restore_window)
+
     def add_job(self):
         job_num = self.job_num_edit.text()
         tab_page = TabPage()
@@ -55,6 +61,29 @@ class MainUI(QWidget):
         if widget is not None:
             widget.deleteLater()
         self.jobs_tab_widget.removeTab(index)
+
+    def event(self, event):
+        if event.type() == QEvent.WindowStateChange and self.isMinimized():
+            self.setWindowFlags(self.windowFlags() & ~Qt.Tool)
+            self.tray_icon.show()
+            return True
+        else:
+            return super(MainUI, self).event(event)
+
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, "Message", "Are you sure you want to quit?",
+                                     QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            self.tray_icon.show()
+            self.hide()
+            event.ignore()
+
+    def restore_window(self, reason):
+        if reason == QSystemTrayIcon.DoubleClick:
+            self.tray_icon.hide()
+            self.showNormal()
 
 
 class TabPage(QWidget):
