@@ -45,9 +45,9 @@ class MainUI(QWidget):
         self.setLayout(main_layout)
 
     def make_connections(self):
+        self.job_num_edit.returnPressed.connect(self.job_num_add_button.click)
         self.job_num_add_button.clicked.connect(self.find_job)
         self.jobs_tab_widget.tabCloseRequested.connect(self.remove_job)
-
         self.tray_icon.activated.connect(self.restore_window)
 
     def find_job(self):
