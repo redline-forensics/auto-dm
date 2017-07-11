@@ -114,9 +114,7 @@ class MainUI(QWidget):
 class TabPage(QWidget):
     def __init__(self, job_dir):
         super(TabPage, self).__init__()
-
         self.job_dir = job_dir
-
         self.init_ui()
 
     def init_ui(self):
@@ -147,7 +145,6 @@ class TabPage(QWidget):
 
         self.drawings_folder_button = QPushButton(open_icon, "")
         # endregion
-
         # region Job Controls
         self.open_job_folder_button = QPushButton("Open Job Folder")
         self.open_basecamp_page_button = QPushButton("Open Basecamp Page")
@@ -157,7 +154,6 @@ class TabPage(QWidget):
         # endregion
 
         tool_icon = QIcon(os.path.join(icon_path, "tool.png"))
-
         # region SCENE
         self.scene_vehicle_button = QPushButton("Vehicle Scan")
         self.scene_vehicle_tool_button = QPushButton(tool_icon, "")
@@ -165,7 +161,6 @@ class TabPage(QWidget):
         self.scene_site_tool_Button = QPushButton(tool_icon, "")
         self.scene_copy_folder_button = QPushButton("Copy Files to Job Folder")
         # endregion
-
         # region Pix4D
         self.pix4d_vehicle_button = QPushButton("Vehicle Drone Tool")
         self.pix4d_vehicle_tool_button = QPushButton(tool_icon, "")
@@ -173,7 +168,6 @@ class TabPage(QWidget):
         self.pix4d_site_tool_button = QPushButton(tool_icon, "")
         self.pix4d_copy_folder_button = QPushButton("Copy Files to Job Folder")
         # endregion
-
         # region Tools
         self.google_maps_stitcher_button = QPushButton("Google Maps Stitcher")
         # endregion
