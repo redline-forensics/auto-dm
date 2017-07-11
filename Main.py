@@ -1,8 +1,9 @@
 import os.path
 import sys
 
-from PySide.QtCore import *
 from PySide.QtGui import *
+
+from JobDirFinder import *
 
 resource_path = os.path.join(os.path.split(__file__)[0], "resources")
 icon_path = os.path.join(resource_path, "icons")
@@ -15,13 +16,13 @@ class MainUI(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        self.tray_icon = QSystemTrayIcon()
+        self.tray_icon = QSystemTrayIcon(QIcon(os.path.join(icon_path, "main.png")))
+        self.setWindowTitle("AutoDM")
 
         self.create_controls()
         self.create_layout()
         self.make_connections()
 
-        self.setWindowTitle("AutoDM")
         self.show()
 
     def create_controls(self):
@@ -45,16 +46,28 @@ class MainUI(QWidget):
         self.setLayout(main_layout)
 
     def make_connections(self):
-        self.job_num_add_button.clicked.connect(self.add_job)
+        self.job_num_add_button.clicked.connect(self.find_job)
         self.jobs_tab_widget.tabCloseRequested.connect(self.remove_job)
 
         self.tray_icon.activated.connect(self.restore_window)
 
-    def add_job(self):
-        job_num = self.job_num_edit.text()
-        tab_page = TabPage()
+    def find_job(self):
+        job_num = int(self.job_num_edit.text())
+        job_dir_finder = FindJobDir(job_num)
+        job_dir_finder.finished.connect(self.add_job)
+        try:
+            job_dir_finder.start()
+        except IOError:
+            QMessageBox.critical(self, "J{:d} Not Found".format(job_num),
+                                 "Could not find J{:d} on the server".format(job_num))
 
-        self.jobs_tab_widget.addTab(tab_page, job_num)
+    def add_job(self, num, job_dir):
+        if job_dir is None:
+            pass
+            # TODO: show error message
+        else:
+            tab_page = TabPage(job_dir)
+            self.jobs_tab_widget.addTab(tab_page, "J" + str(num))
 
     def remove_job(self, index):
         widget = self.jobs_tab_widget.widget(index)
@@ -87,8 +100,11 @@ class MainUI(QWidget):
 
 
 class TabPage(QWidget):
-    def __init__(self):
+    def __init__(self, job_dir):
         super(TabPage, self).__init__()
+
+        self.job_dir = job_dir
+
         self.init_ui()
 
     def init_ui(self):
@@ -99,7 +115,7 @@ class TabPage(QWidget):
         # region Job Folders
         open_icon = QIcon(os.path.join(icon_path, "open.png"))
 
-        self.base_job_folder_edit = QLineEdit()
+        self.base_job_folder_edit = QLineEdit(self.job_dir)
         self.base_job_folder_edit.setPlaceholderText("Base Job Folder")
 
         self.base_job_folder_button = QPushButton(open_icon, "")
