@@ -115,7 +115,22 @@ class TabPage(QWidget):
     def __init__(self, job_dir):
         super(TabPage, self).__init__()
         self.job_dir = job_dir
+        self.find_drone_dir()
+
         self.init_ui()
+
+    def find_drone_dir(self):
+        charlotte_drone_path = os.path.join(self.job_dir, "Drone")
+        if os.path.isdir(charlotte_drone_path):
+            self.drone_dir = charlotte_drone_path
+            return
+
+        nashville_drone_path = os.path.join(self.job_dir, *["Photographs", "Drone"])
+        if os.path.isdir(nashville_drone_path):
+            self.drone_dir = nashville_drone_path
+            return
+
+        self.drone_dir = ""
 
     def init_ui(self):
         self.create_controls()
@@ -130,7 +145,7 @@ class TabPage(QWidget):
 
         self.base_job_folder_button = QPushButton(open_icon, "")
 
-        self.drone_folder_edit = QLineEdit()
+        self.drone_folder_edit = QLineEdit(self.drone_dir)
         self.drone_folder_edit.setPlaceholderText("Drone Folder")
 
         self.drone_folder_button = QPushButton(open_icon, "")
