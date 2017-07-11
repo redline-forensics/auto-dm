@@ -1,6 +1,10 @@
+import os.path
 import sys
 
 from PySide.QtGui import *
+
+resource_path = os.path.join(os.path.split(__file__)[0], "resources")
+icon_path = os.path.join(resource_path, "icons")
 
 
 class MainUI(QWidget):
@@ -64,29 +68,27 @@ class TabPage(QWidget):
 
     def create_controls(self):
         # region Job Folders
+        open_icon = QIcon(os.path.join(icon_path, "open.png"))
+
         self.base_job_folder_edit = QLineEdit()
         self.base_job_folder_edit.setPlaceholderText("Base Job Folder")
 
-        self.base_job_folder_button = QPushButton(
-            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/open.png"), "")
+        self.base_job_folder_button = QPushButton(open_icon, "")
 
         self.drone_folder_edit = QLineEdit()
         self.drone_folder_edit.setPlaceholderText("Drone Folder")
 
-        self.drone_folder_button = QPushButton(
-            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/open.png"), "")
+        self.drone_folder_button = QPushButton(open_icon, "")
 
         self.scans_folder_edit = QLineEdit()
         self.scans_folder_edit.setPlaceholderText("Scans Folder")
 
-        self.scans_folder_button = QPushButton(
-            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/open.png"), "")
+        self.scans_folder_button = QPushButton(open_icon, "")
 
         self.drawings_folder_edit = QLineEdit()
         self.drawings_folder_edit.setPlaceholderText("Drawings Folder")
 
-        self.drawings_folder_button = QPushButton(
-            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/open.png"), "")
+        self.drawings_folder_button = QPushButton(open_icon, "")
         # endregion
 
         # region Job Controls
@@ -97,23 +99,21 @@ class TabPage(QWidget):
         self.add_to_open_air_button.setDisabled(True)
         # endregion
 
+        tool_icon = QIcon(os.path.join(icon_path, "tool.png"))
+
         # region SCENE
         self.scene_vehicle_button = QPushButton("Vehicle Scan")
-        self.scene_vehicle_tool_button = QPushButton(
-            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/tool.png"), "")
+        self.scene_vehicle_tool_button = QPushButton(tool_icon, "")
         self.scene_site_button = QPushButton("Site Scan")
-        self.scene_site_tool_Button = QPushButton(
-            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/tool.png"), "")
+        self.scene_site_tool_Button = QPushButton(tool_icon, "")
         self.scene_copy_folder_button = QPushButton("Copy Files to Job Folder")
         # endregion
 
         # region Pix4D
         self.pix4d_vehicle_button = QPushButton("Vehicle Drone Tool")
-        self.pix4d_vehicle_tool_button = QPushButton(
-            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/tool.png"), "")
+        self.pix4d_vehicle_tool_button = QPushButton(tool_icon, "")
         self.pix4d_site_button = QPushButton("Site Drone Tool")
-        self.pix4d_site_tool_button = QPushButton(
-            QIcon("C:/Users/Crohlfing/PycharmProjects/AutoDM/resources/icons/tool.png"), "")
+        self.pix4d_site_tool_button = QPushButton(tool_icon, "")
         self.pix4d_copy_folder_button = QPushButton("Copy Files to Job Folder")
         # endregion
 
