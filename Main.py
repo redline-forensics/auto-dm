@@ -57,14 +57,6 @@ class MainUI(QWidget):
         else:
             job_num = int(job_num)
 
-        if self.jobs_dict.get(job_num, 0) > 0:
-            flags = QMessageBox.StandardButton.Yes
-            flags |= QMessageBox.StandardButton.No
-            response = QMessageBox.warning(self, "J{:d} Already Open".format(job_num),
-                                           "J{:d} is already open. Open a new instance anyway?".format(job_num), flags)
-            if response == QMessageBox.StandardButton.No:
-                return
-
         job_dir_finder = FindJobDir(job_num)
         job_dir_finder.finished.connect(self.add_job)
         try:
@@ -74,6 +66,14 @@ class MainUI(QWidget):
                                  "Could not find J{:d} on the server".format(job_num))
 
     def add_job(self, num, job_dir):
+        if self.jobs_dict.get(num, 0) > 0:
+            flags = QMessageBox.StandardButton.Yes
+            flags |= QMessageBox.StandardButton.No
+            response = QMessageBox.warning(self, "J{:d} Already Open".format(num),
+                                           "J{:d} is already open. Open a new instance anyway?".format(num), flags)
+            if response == QMessageBox.StandardButton.No:
+                return
+
         self.jobs_dict[num] = self.jobs_dict.get(num, 0) + 1
         tab_page = TabPage(job_dir)
         self.jobs_tab_widget.addTab(tab_page, "J" + str(num))

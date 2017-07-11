@@ -19,6 +19,7 @@ class FindJobDir(QObject):
         self.num = num
 
         self.is_found = False
+        self.is_displayed = False
 
     def start(self):
         for job_dir in os.listdir(dv_jobs_path):
@@ -36,8 +37,10 @@ class FindJobDir(QObject):
         self.pool.start(check_job_worker)
 
     def found_dir(self, job_path):
-        self.is_found = True
-        self.finished.emit(self.num, job_path)
+        if not self.is_displayed:
+            self.is_displayed = True
+            job_num = int(ntpath.basename(job_path).split(" ", 1)[0][1:])
+            self.finished.emit(job_num, job_path)
 
 
 class CheckJobWorker(QObject, QRunnable):
