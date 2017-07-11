@@ -141,9 +141,6 @@ class TabPage(QWidget):
         open_icon = QIcon(os.path.join(icon_path, "open.png"))
 
         self.base_job_folder_label = QLabel(self.job_dir)
-        # self.base_job_folder_label.setPlaceholderText("Base Job Folder")
-
-        self.base_job_folder_button = QPushButton(open_icon, "")
 
         self.drone_folder_edit = QLineEdit(self.drone_dir)
         self.drone_folder_edit.setPlaceholderText("Drone Folder")
@@ -195,7 +192,6 @@ class TabPage(QWidget):
         job_folders_group = QGroupBox("Job Folders")
         job_folders_layout = QGridLayout()
         job_folders_layout.addWidget(self.base_job_folder_label, 0, 0)
-        job_folders_layout.addWidget(self.base_job_folder_button, 0, 1)
         job_folders_layout.addWidget(self.drone_folder_edit, 1, 0)
         job_folders_layout.addWidget(self.drone_folder_button, 1, 1)
         job_folders_layout.addWidget(self.scans_folder_edit, 2, 0)
