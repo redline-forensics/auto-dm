@@ -74,13 +74,9 @@ class MainUI(QWidget):
                                  "Could not find J{:d} on the server".format(job_num))
 
     def add_job(self, num, job_dir):
-        if job_dir is None:
-            pass
-            # TODO: show error message
-        else:
-            self.jobs_dict[num] = self.jobs_dict.get(num, 0) + 1
-            tab_page = TabPage(job_dir)
-            self.jobs_tab_widget.addTab(tab_page, "J" + str(num))
+        self.jobs_dict[num] = self.jobs_dict.get(num, 0) + 1
+        tab_page = TabPage(job_dir)
+        self.jobs_tab_widget.addTab(tab_page, "J" + str(num))
 
     def remove_job(self, index):
         job_num = int(self.jobs_tab_widget.tabText(index)[1:])
