@@ -140,21 +140,26 @@ class TabPage(QWidget):
         # region Job Folders
         open_icon = QIcon(os.path.join(icon_path, "open.png"))
 
-        self.base_job_folder_label = QLabel(self.job_dir)
+        self.base_job_folder_label = QLabel("Base:")
+        self.base_job_folder = QLabel(self.job_dir)
 
+        folder_str = "Folder"
+        drone_str = "Drone"
+        self.drone_folder_label = QLabel("{}:".format(drone_str))
         self.drone_folder_edit = QLineEdit(self.drone_dir)
-        self.drone_folder_edit.setPlaceholderText("Drone Folder")
-
+        self.drone_folder_edit.setPlaceholderText("{} {}".format(drone_str, folder_str))
         self.drone_folder_button = QPushButton(open_icon, "")
 
+        scans_str = "Scans"
+        self.scans_folder_label = QLabel("{}:".format(scans_str))
         self.scans_folder_edit = QLineEdit()
-        self.scans_folder_edit.setPlaceholderText("Scans Folder")
-
+        self.scans_folder_edit.setPlaceholderText("{} {}".format(scans_str, folder_str))
         self.scans_folder_button = QPushButton(open_icon, "")
 
+        drawings_str = "Drawings"
+        self.drawings_folder_label = QLabel("{}:".format(drawings_str))
         self.drawings_folder_edit = QLineEdit()
-        self.drawings_folder_edit.setPlaceholderText("Drawings Folder")
-
+        self.drawings_folder_edit.setPlaceholderText("{} {}".format(drawings_str, folder_str))
         self.drawings_folder_button = QPushButton(open_icon, "")
         # endregion
         # region Job Controls
@@ -192,12 +197,16 @@ class TabPage(QWidget):
         job_folders_group = QGroupBox("Job Folders")
         job_folders_layout = QGridLayout()
         job_folders_layout.addWidget(self.base_job_folder_label, 0, 0)
-        job_folders_layout.addWidget(self.drone_folder_edit, 1, 0)
-        job_folders_layout.addWidget(self.drone_folder_button, 1, 1)
-        job_folders_layout.addWidget(self.scans_folder_edit, 2, 0)
-        job_folders_layout.addWidget(self.scans_folder_button, 2, 1)
-        job_folders_layout.addWidget(self.drawings_folder_edit, 3, 0)
-        job_folders_layout.addWidget(self.drawings_folder_button, 3, 1)
+        job_folders_layout.addWidget(self.base_job_folder, 0, 1)
+        job_folders_layout.addWidget(self.drone_folder_label, 1, 0)
+        job_folders_layout.addWidget(self.drone_folder_edit, 1, 1)
+        job_folders_layout.addWidget(self.drone_folder_button, 1, 2)
+        job_folders_layout.addWidget(self.scans_folder_label, 2, 0)
+        job_folders_layout.addWidget(self.scans_folder_edit, 2, 1)
+        job_folders_layout.addWidget(self.scans_folder_button, 2, 2)
+        job_folders_layout.addWidget(self.drawings_folder_label, 3, 0)
+        job_folders_layout.addWidget(self.drawings_folder_edit, 3, 1)
+        job_folders_layout.addWidget(self.drawings_folder_button, 3, 2)
         job_folders_group.setLayout(job_folders_layout)
         first_column.addWidget(job_folders_group)
         # endregion
