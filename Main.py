@@ -117,6 +117,10 @@ class TabPage(QWidget):
         self.pix4d_copy_folder_button = QPushButton("Copy Files to Job Folder")
         # endregion
 
+        # region Tools
+        self.google_maps_stitcher_button = QPushButton("Google Maps Stitcher")
+        # endregion
+
     def create_layout(self):
         main_layout = QHBoxLayout()
 
@@ -192,6 +196,16 @@ class TabPage(QWidget):
         second_column.addWidget(pix4d_group)
         # endregion
         main_layout.addLayout(second_column)
+
+        third_column = QVBoxLayout()
+        # region Tools
+        tools_group = QGroupBox("Tools")
+        tools_layout = QVBoxLayout()
+        tools_layout.addWidget(self.google_maps_stitcher_button)
+        tools_group.setLayout(tools_layout)
+        third_column.addWidget(tools_group)
+        # endregion
+        main_layout.addLayout(third_column)
 
         main_layout.setStretch(0, 1)
         main_layout.setStretch(1, 1)
