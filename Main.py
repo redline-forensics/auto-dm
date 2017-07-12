@@ -205,7 +205,7 @@ class TabPage(QWidget):
         else:
             os.makedirs(charlotte_drawings_path)
             drawings_path = charlotte_drawings_path
-            
+
         charlotte_assets_path = os.path.join(drawings_path, "Assets")
         charlotte_asset_path = os.path.join(drawings_path, "Asset")
         if os.path.isdir(charlotte_assets_path):
@@ -245,6 +245,8 @@ class TabPage(QWidget):
         self.assets_folder_edit = QLineEdit()
         self.assets_folder_edit.setPlaceholderText("{} {}".format(assets_str, folder_str))
         self.assets_folder_button = QPushButton(open_icon, "")
+        self.assets_folder_add_button = QPushButton(QIcon(os.path.join(icon_path, "new_dir.png")), "")
+        self.assets_folder_edit.textChanged.connect(lambda text: self.assets_folder_add_button.setVisible(text == ""))
         # endregion
         # region Job Controls
         self.open_job_folder_button = QPushButton("Open Job Folder")
@@ -279,18 +281,44 @@ class TabPage(QWidget):
         first_column = QVBoxLayout()
         # region Job Folders
         job_folders_group = QGroupBox("Job Folders")
-        job_folders_layout = QGridLayout()
-        job_folders_layout.addWidget(self.base_job_folder_label, 0, 0)
-        job_folders_layout.addWidget(self.base_job_folder, 0, 1)
-        job_folders_layout.addWidget(self.drone_folder_label, 1, 0)
-        job_folders_layout.addWidget(self.drone_folder_edit, 1, 1)
-        job_folders_layout.addWidget(self.drone_folder_button, 1, 2)
-        job_folders_layout.addWidget(self.scans_folder_label, 2, 0)
-        job_folders_layout.addWidget(self.scans_folder_edit, 2, 1)
-        job_folders_layout.addWidget(self.scans_folder_button, 2, 2)
-        job_folders_layout.addWidget(self.assets_folder_label, 3, 0)
-        job_folders_layout.addWidget(self.assets_folder_edit, 3, 1)
-        job_folders_layout.addWidget(self.assets_folder_button, 3, 2)
+        job_folders_layout = QVBoxLayout()
+
+        self.base_job_folder_layout = QHBoxLayout()
+        self.base_job_folder_layout.addWidget(self.base_job_folder_label)
+        self.base_job_folder_layout.addWidget(self.base_job_folder)
+        self.base_job_folder_layout.setStretch(0, 0)
+        self.base_job_folder_layout.setStretch(1, 1)
+        job_folders_layout.addLayout(self.base_job_folder_layout)
+
+        self.drone_folder_layout = QHBoxLayout()
+        self.drone_folder_layout.addWidget(self.drone_folder_label)
+        self.drone_folder_layout.addWidget(self.drone_folder_edit)
+        self.drone_folder_layout.addWidget(self.drone_folder_button)
+        self.drone_folder_layout.setStretch(0, 0)
+        self.drone_folder_layout.setStretch(1, 1)
+        self.drone_folder_layout.setStretch(2, 0)
+        job_folders_layout.addLayout(self.drone_folder_layout)
+
+        self.scans_folder_layout = QHBoxLayout()
+        self.scans_folder_layout.addWidget(self.scans_folder_label)
+        self.scans_folder_layout.addWidget(self.scans_folder_edit)
+        self.scans_folder_layout.addWidget(self.scans_folder_button)
+        self.scans_folder_layout.setStretch(0, 0)
+        self.scans_folder_layout.setStretch(1, 1)
+        self.scans_folder_layout.setStretch(2, 0)
+        job_folders_layout.addLayout(self.scans_folder_layout)
+
+        self.assets_folder_layout = QHBoxLayout()
+        self.assets_folder_layout.addWidget(self.assets_folder_label)
+        self.assets_folder_layout.addWidget(self.assets_folder_edit)
+        self.assets_folder_layout.addWidget(self.assets_folder_button)
+        self.assets_folder_layout.addWidget(self.assets_folder_add_button)
+        self.assets_folder_layout.setStretch(0, 0)
+        self.assets_folder_layout.setStretch(1, 1)
+        self.assets_folder_layout.setStretch(2, 0)
+        self.assets_folder_layout.setStretch(3, 0)
+        job_folders_layout.addLayout(self.assets_folder_layout)
+
         job_folders_group.setLayout(job_folders_layout)
         first_column.addWidget(job_folders_group)
         # endregion
