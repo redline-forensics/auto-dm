@@ -34,9 +34,14 @@ class MainUI(QWidget):
         self.tray_icon = QSystemTrayIcon(icon)
 
         menu = QMenu()
-        menu.addAction("Exit")
+        exit_action = menu.addAction("Exit")
+        exit_action.triggered.connect(self.quit)
 
         self.tray_icon.setContextMenu(menu)
+
+    def quit(self):
+        Hotkeys.unhook()
+        QApplication.quit()
 
     def init_hotkeys(self):
         # Format: Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.woi)
