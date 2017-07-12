@@ -46,3 +46,5 @@ def run(parent):
             return
 
     print(app)
+
+    print(Preferences.get_pix4d_email())

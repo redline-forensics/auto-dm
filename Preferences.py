@@ -1,39 +1,59 @@
 import ConfigParser
 
 
-def build_prefs_file():
-    add_section(pix4d_section)
-    set(pix4d_section, pix4d_email_pref)
-    set(pix4d_section, pix4d_password_pref)
+def _build_prefs_file():
+    _add_section(_pix4d_section)
+    _set(_pix4d_section, _pix4d_email_pref)
+    _set(_pix4d_section, _pix4d_password_pref)
 
 
-def add_section(section):
-    config.add_section(section)
-    write()
+def _add_section(section):
+    _config.add_section(section)
+    _write()
 
 
-def set(section, option, value=None):
+def _set(section, option, value=None):
     if value is None:
-        config.set(section, option, "")
+        _config.set(section, option, "")
     else:
-        config.set(section, option, value)
-    write()
+        _config.set(section, option, value)
+    _write()
 
 
-def write():
-    with open(prefs_file, "wb") as config_file:
-        config.write(config_file)
+def _write():
+    with open(_prefs_file, "wb") as config_file:
+        _config.write(config_file)
 
 
-prefs_file = "preferences.cfg"
+# region Convenience Methods
+def get_pix4d_email():
+    return _config.get(_pix4d_section, _pix4d_email_pref)
 
-pix4d_section = "Pix4D"
-pix4d_email_pref = "Email"
-pix4d_password_pref = "Password"
 
-config = ConfigParser.SafeConfigParser()
-successful = config.read(prefs_file)
-if not successful:
-    build_prefs_file()
+def set_pix4d_email(email):
+    _set(_pix4d_section, _pix4d_email_pref, email)
 
-print(config)
+
+def get_pix4d_password():
+    return _config.get(_pix4d_section, _pix4d_password_pref)
+
+
+def set_pix4d_password(password):
+    _set(_pix4d_section, _pix4d_password_pref, password)
+
+
+# endregion
+
+
+_prefs_file = "preferences.cfg"
+
+_pix4d_section = "Pix4D"
+_pix4d_email_pref = "Email"
+_pix4d_password_pref = "Password"
+
+_config = ConfigParser.SafeConfigParser()
+_successful = _config.read(_prefs_file)
+if not _successful:
+    _build_prefs_file()
+
+print(_config)
