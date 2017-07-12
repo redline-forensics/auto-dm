@@ -20,7 +20,7 @@ class MainUI(QWidget):
         self.tray_icon = QSystemTrayIcon(main_icon)
         self.setWindowTitle("AutoDM")
         self.setWindowIcon(main_icon)
-        self.resize(644, 405)
+        self.resize(660, 362)
 
         self.create_controls()
         self.create_layout()
@@ -340,9 +340,9 @@ class TabPage(QWidget):
         # endregion
         main_layout.addLayout(third_column)
 
-        main_layout.setStretch(0, 1)
-        main_layout.setStretch(1, 1)
-        main_layout.setStretch(2, 1)
+        main_layout.setStretch(0, 100)
+        main_layout.setStretch(1, 75)
+        main_layout.setStretch(2, 75)
 
         self.setLayout(main_layout)
 
