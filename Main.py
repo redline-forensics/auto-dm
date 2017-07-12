@@ -394,9 +394,14 @@ class TabPage(QWidget):
             self.scans_dir = charlotte_scans_path
             return
 
-        nashville_scans_path = os.path.join(self.job_dir, "Scan Data")
-        if os.path.isdir(nashville_scans_path):
-            self.scans_dir = nashville_scans_path
+        nashville_scans_path_0 = os.path.join(self.job_dir, "Scan Data")
+        if os.path.isdir(nashville_scans_path_0):
+            self.scans_dir = nashville_scans_path_0
+            return
+
+        nashville_scans_path_1 = os.path.join(self.job_dir, "Scanned Data")
+        if os.path.isdir(nashville_scans_path_1):
+            self.scans_dir = nashville_scans_path_1
             return
 
         self.scans_dir = ""
