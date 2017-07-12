@@ -158,6 +158,13 @@ class TabPage(QWidget):
 
     # endregion
 
+    # class JobLabel(QLabel):
+    #     def paintEvent(self, event):
+    #         painter = QPainter(self)
+    #         metrics = QFontMetrics(self.font())
+    #         elided = metrics.elidedText(self.text(), Qt.ElideLeft, self.width())
+    #         painter.drawText(self.rect(), self.alignment(), elided)
+
     def __init__(self, job_dir):
         super(TabPage, self).__init__()
 
@@ -174,7 +181,9 @@ class TabPage(QWidget):
         open_icon = QIcon(os.path.join(icon_path, "open.png"))
 
         self.base_job_folder_label = QLabel("Base:")
-        self.base_job_folder = QLabel()
+        self.base_job_folder = QLineEdit()
+        self.base_job_folder.setReadOnly(True)
+        self.base_job_folder.setFrame(False)
 
         folder_str = "Folder"
         drone_str = "Drone"
@@ -340,6 +349,7 @@ class TabPage(QWidget):
 
         main_layout.setStretch(0, 1)
         main_layout.setStretch(1, 1)
+        main_layout.setStretch(2, 1)
 
         self.setLayout(main_layout)
 
