@@ -76,7 +76,8 @@ class MainUI(QWidget):
 
         self.jobs_dict[num] = self.jobs_dict.get(num, 0) + 1
         tab_page = TabPage(job_dir)
-        self.jobs_tab_widget.addTab(tab_page, "J" + str(num))
+        self.jobs_tab_widget.insertTab(0, tab_page, "J" + str(num))
+        self.jobs_tab_widget.setCurrentIndex(0)
 
     def remove_job(self, index):
         job_num = int(self.jobs_tab_widget.tabText(index)[1:])
