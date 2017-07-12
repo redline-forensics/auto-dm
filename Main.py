@@ -478,7 +478,7 @@ class TabPage(QWidget):
         QDesktopServices.openUrl(QUrl("file:{}".format(self.job_dir), QUrl.TolerantMode))
 
     def run_pix4d_bot(self):
-        Pix4DBot.run()
+        Pix4DBot.run(self)
 
 
 if __name__ == '__main__':
