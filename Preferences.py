@@ -3,10 +3,8 @@ import ConfigParser
 
 def build_prefs_file():
     add_section(pix4d_section)
-    set(pix4d_section, pix4d_email_pref, "")
-    set(pix4d_section, pix4d_password_pref, "")
-
-    write()
+    set(pix4d_section, pix4d_email_pref)
+    set(pix4d_section, pix4d_password_pref)
 
 
 def add_section(section):
@@ -14,8 +12,11 @@ def add_section(section):
     write()
 
 
-def set(section, option, value):
-    config.set(section, option, value)
+def set(section, option, value=None):
+    if value is None:
+        config.set(section, option, "")
+    else:
+        config.set(section, option, value)
     write()
 
 
