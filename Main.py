@@ -34,6 +34,9 @@ class MainUI(QWidget):
         self.tray_icon = QSystemTrayIcon(icon)
 
         menu = QMenu()
+        show_action = menu.addAction("Show")
+        show_action.triggered.connect(self.restore_window)
+        menu.setDefaultAction(show_action)
         exit_action = menu.addAction("Exit")
         exit_action.triggered.connect(self.quit)
 
