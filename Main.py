@@ -203,6 +203,27 @@ class TabPage(QWidget):
         elif os.path.isdir(charlotte_drawing_path):
             drawings_path = charlotte_drawing_path
         else:
+            self.assets_dir = ""
+            return
+
+        charlotte_assets_path = os.path.join(drawings_path, "Assets")
+        charlotte_asset_path = os.path.join(drawings_path, "Asset")
+        if os.path.isdir(charlotte_assets_path):
+            self.assets_dir = charlotte_assets_path
+        elif os.path.isdir(charlotte_asset_path):
+            self.assets_dir = charlotte_asset_path
+        else:
+            self.assets_dir = ""
+            return
+
+    def create_assets_dir(self):
+        charlotte_drawings_path = os.path.join(self.job_dir, "Drawings")
+        charlotte_drawing_path = os.path.join(self.job_dir, "Drawing")
+        if os.path.isdir(charlotte_drawings_path):
+            drawings_path = charlotte_drawings_path
+        elif os.path.isdir(charlotte_drawing_path):
+            drawings_path = charlotte_drawing_path
+        else:
             os.makedirs(charlotte_drawings_path)
             drawings_path = charlotte_drawings_path
 
@@ -219,6 +240,7 @@ class TabPage(QWidget):
     def init_ui(self):
         self.create_controls()
         self.create_layout()
+        self.make_connections()
 
     def create_controls(self):
         # region Job Folders
@@ -246,7 +268,6 @@ class TabPage(QWidget):
         self.assets_folder_edit.setPlaceholderText("{} {}".format(assets_str, folder_str))
         self.assets_folder_button = QPushButton(open_icon, "")
         self.assets_folder_add_button = QPushButton(QIcon(os.path.join(icon_path, "new_dir.png")), "")
-        self.assets_folder_edit.textChanged.connect(lambda text: self.assets_folder_add_button.setVisible(text == ""))
         # endregion
         # region Job Controls
         self.open_job_folder_button = QPushButton("Open Job Folder")
@@ -394,6 +415,11 @@ class TabPage(QWidget):
         main_layout.setStretch(1, 1)
 
         self.setLayout(main_layout)
+
+    def make_connections(self):
+        self.assets_folder_edit.textChanged.connect(lambda text: self.assets_folder_add_button.setVisible(text == ""))
+
+        self.assets_folder_add_button.clicked.connect(self.create_assets_dir)
 
 
 if __name__ == '__main__':
