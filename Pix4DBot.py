@@ -1,6 +1,7 @@
 import os
 import re
 import warnings
+import Preferences
 
 from PySide.QtGui import QMessageBox
 from pywinauto import Application
