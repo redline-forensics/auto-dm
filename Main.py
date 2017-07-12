@@ -1,9 +1,9 @@
 import os.path
 import sys
-import Hotkeys
 
 from PySide.QtGui import *
 
+import Hotkeys
 from JobDirFinder import *
 
 resource_path = os.path.join(os.path.split(__file__)[0], "resources")
@@ -131,10 +131,7 @@ class MainUI(QWidget):
             event.ignore()
 
     def restore_window(self, reason=None):
-        if reason == QSystemTrayIcon.DoubleClick:
-            self.tray_icon.hide()
-            self.showNormal()
-        elif reason is None:
+        if reason == QSystemTrayIcon.DoubleClick or reason is None:
             self.tray_icon.hide()
             self.showNormal()
             self.activateWindow()
@@ -185,13 +182,6 @@ class TabPage(QWidget):
         self.assets_folder_edit.setText(assets_dir)
 
     # endregion
-
-    # class JobLabel(QLabel):
-    #     def paintEvent(self, event):
-    #         painter = QPainter(self)
-    #         metrics = QFontMetrics(self.font())
-    #         elided = metrics.elidedText(self.text(), Qt.ElideLeft, self.width())
-    #         painter.drawText(self.rect(), self.alignment(), elided)
 
     def __init__(self, job_dir):
         super(TabPage, self).__init__()
