@@ -262,7 +262,7 @@ class TabPage(QWidget):
         self.scans_folder_edit.setPlaceholderText("{} {}".format(scans_str, folder_str))
         self.scans_folder_button = QPushButton(open_icon, "")
 
-        assets_str = "assets"
+        assets_str = "Assets"
         self.assets_folder_label = QLabel("{}:".format(assets_str))
         self.assets_folder_edit = QLineEdit()
         self.assets_folder_edit.setPlaceholderText("{} {}".format(assets_str, folder_str))
