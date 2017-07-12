@@ -425,21 +425,18 @@ class TabPage(QWidget):
             os.makedirs(charlotte_assets_path)
             self.assets_dir = charlotte_assets_path
 
-    def _choose_dir(self):
-        return QFileDialog.getExistingDirectory(self, "", self.job_dir)
-
     def choose_drone_dir(self):
-        choose_dir = self._choose_dir()
+        choose_dir = QFileDialog.getExistingDirectory(self, "Choose Drone Folder", self.job_dir)
         if choose_dir != "":
             self.drone_dir = choose_dir
 
     def choose_scans_dir(self):
-        choose_dir = self._choose_dir()
+        choose_dir = QFileDialog.getExistingDirectory(self, "Choose Scans Folder", self.job_dir)
         if choose_dir != "":
             self.scans_dir = choose_dir
 
     def choose_assets_dir(self):
-        choose_dir = self._choose_dir()
+        choose_dir = QFileDialog.getExistingDirectory(self, "Choose Assets Folder", self.job_dir)
         if choose_dir != "":
             self.assets_dir = choose_dir
 
