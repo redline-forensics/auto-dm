@@ -4,6 +4,7 @@ import sys
 from PySide.QtGui import *
 
 import Hotkeys
+import Pix4DBot
 from JobDirFinder import *
 
 resource_path = os.path.join(os.path.split(__file__)[0], "resources")
@@ -52,6 +53,7 @@ class MainUI(QWidget):
 
     def add_job_hotkey(self):
         self.restore_window()
+        self.job_num_edit.setFocus()
         self.job_num_edit.selectAll()
 
     def create_controls(self):
@@ -376,6 +378,8 @@ class TabPage(QWidget):
 
         self.open_job_folder_button.clicked.connect(self.open_job_folder)
 
+        self.pix4d_site_button.clicked.connect(self.run_pix4d_bot)
+
     def find_dirs(self, job_dir):
         self.job_dir = job_dir
         self.find_drone_dir()
@@ -472,6 +476,9 @@ class TabPage(QWidget):
 
     def open_job_folder(self):
         QDesktopServices.openUrl(QUrl("file:{}".format(self.job_dir), QUrl.TolerantMode))
+
+    def run_pix4d_bot(self):
+        Pix4DBot.run()
 
 
 if __name__ == '__main__':
