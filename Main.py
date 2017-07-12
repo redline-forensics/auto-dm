@@ -112,12 +112,62 @@ class MainUI(QWidget):
 
 
 class TabPage(QWidget):
+    # region job_dir
+    @property
+    def job_dir(self):
+        return self.__job_dir
+
+    @job_dir.setter
+    def job_dir(self, job_dir):
+        self.__job_dir = job_dir
+        self.base_job_folder.setText(job_dir)
+
+    # endregion
+    # region drone_dir
+    @property
+    def drone_dir(self):
+        return self.__drone_dir
+
+    @drone_dir.setter
+    def drone_dir(self, drone_dir):
+        self.__drone_dir = drone_dir
+        self.drone_folder_edit.setText(drone_dir)
+
+    # endregion
+    # region scans_dir
+    @property
+    def scans_dir(self):
+        return self.__scans_dir
+
+    @scans_dir.setter
+    def scans_dir(self, scans_dir):
+        self.__scans_dir = scans_dir
+        self.scans_folder_edit.setText(scans_dir)
+
+    # endregion
+    # region assets_dir
+    @property
+    def assets_dir(self):
+        return self.__assets_dir
+
+    @assets_dir.setter
+    def assets_dir(self, assets_dir):
+        self.__assets_dir = assets_dir
+        self.assets_folder_edit.setText(assets_dir)
+
+    # endregion
+
     def __init__(self, job_dir):
         super(TabPage, self).__init__()
-        self.job_dir = job_dir
-        self.find_drone_dir()
 
         self.init_ui()
+        self.find_dirs(job_dir)
+
+    def find_dirs(self, job_dir):
+        self.job_dir = job_dir
+        self.find_drone_dir()
+        self.find_scans_dir()
+        self.find_assets_dir()
 
     def find_drone_dir(self):
         charlotte_drone_path = os.path.join(self.job_dir, "Drone")
@@ -132,6 +182,40 @@ class TabPage(QWidget):
 
         self.drone_dir = ""
 
+    def find_scans_dir(self):
+        charlotte_scans_path = os.path.join(self.job_dir, "Scans")
+        if os.path.isdir(charlotte_scans_path):
+            self.scans_dir = charlotte_scans_path
+            return
+
+        nashville_scans_path = os.path.join(self.job_dir, "Scan Data")
+        if os.path.isdir(nashville_scans_path):
+            self.scans_dir = nashville_scans_path
+            return
+
+        self.scans_dir = ""
+
+    def find_assets_dir(self):
+        charlotte_drawings_path = os.path.join(self.job_dir, "Drawings")
+        charlotte_drawing_path = os.path.join(self.job_dir, "Drawing")
+        if os.path.isdir(charlotte_drawings_path):
+            drawings_path = charlotte_drawings_path
+        elif os.path.isdir(charlotte_drawing_path):
+            drawings_path = charlotte_drawing_path
+        else:
+            os.makedirs(charlotte_drawings_path)
+            drawings_path = charlotte_drawings_path
+            
+        charlotte_assets_path = os.path.join(drawings_path, "Assets")
+        charlotte_asset_path = os.path.join(drawings_path, "Asset")
+        if os.path.isdir(charlotte_assets_path):
+            self.assets_dir = charlotte_assets_path
+        elif os.path.isdir(charlotte_asset_path):
+            self.assets_dir = charlotte_asset_path
+        else:
+            os.makedirs(charlotte_assets_path)
+            self.assets_dir(charlotte_assets_path)
+
     def init_ui(self):
         self.create_controls()
         self.create_layout()
@@ -141,12 +225,12 @@ class TabPage(QWidget):
         open_icon = QIcon(os.path.join(icon_path, "open.png"))
 
         self.base_job_folder_label = QLabel("Base:")
-        self.base_job_folder = QLabel(self.job_dir)
+        self.base_job_folder = QLabel()
 
         folder_str = "Folder"
         drone_str = "Drone"
         self.drone_folder_label = QLabel("{}:".format(drone_str))
-        self.drone_folder_edit = QLineEdit(self.drone_dir)
+        self.drone_folder_edit = QLineEdit()
         self.drone_folder_edit.setPlaceholderText("{} {}".format(drone_str, folder_str))
         self.drone_folder_button = QPushButton(open_icon, "")
 
@@ -156,11 +240,11 @@ class TabPage(QWidget):
         self.scans_folder_edit.setPlaceholderText("{} {}".format(scans_str, folder_str))
         self.scans_folder_button = QPushButton(open_icon, "")
 
-        drawings_str = "Drawings"
-        self.drawings_folder_label = QLabel("{}:".format(drawings_str))
-        self.drawings_folder_edit = QLineEdit()
-        self.drawings_folder_edit.setPlaceholderText("{} {}".format(drawings_str, folder_str))
-        self.drawings_folder_button = QPushButton(open_icon, "")
+        assets_str = "assets"
+        self.assets_folder_label = QLabel("{}:".format(assets_str))
+        self.assets_folder_edit = QLineEdit()
+        self.assets_folder_edit.setPlaceholderText("{} {}".format(assets_str, folder_str))
+        self.assets_folder_button = QPushButton(open_icon, "")
         # endregion
         # region Job Controls
         self.open_job_folder_button = QPushButton("Open Job Folder")
@@ -204,9 +288,9 @@ class TabPage(QWidget):
         job_folders_layout.addWidget(self.scans_folder_label, 2, 0)
         job_folders_layout.addWidget(self.scans_folder_edit, 2, 1)
         job_folders_layout.addWidget(self.scans_folder_button, 2, 2)
-        job_folders_layout.addWidget(self.drawings_folder_label, 3, 0)
-        job_folders_layout.addWidget(self.drawings_folder_edit, 3, 1)
-        job_folders_layout.addWidget(self.drawings_folder_button, 3, 2)
+        job_folders_layout.addWidget(self.assets_folder_label, 3, 0)
+        job_folders_layout.addWidget(self.assets_folder_edit, 3, 1)
+        job_folders_layout.addWidget(self.assets_folder_button, 3, 2)
         job_folders_group.setLayout(job_folders_layout)
         first_column.addWidget(job_folders_group)
         # endregion
