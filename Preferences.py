@@ -2,10 +2,9 @@ import ConfigParser
 
 
 def build_prefs_file():
-    pix4d = "Pix4D"
-    add_section(pix4d)
-    set(pix4d, "Email", "")
-    set(pix4d, "Password", "")
+    add_section(pix4d_section)
+    set(pix4d_section, pix4d_email_pref, "")
+    set(pix4d_section, pix4d_password_pref, "")
 
     write()
 
@@ -24,6 +23,10 @@ def write():
 
 
 prefs_file = "preferences.cfg"
+
+pix4d_section = "Pix4D"
+pix4d_email_pref = "Email"
+pix4d_password_pref = "Password"
 
 config = ConfigParser.SafeConfigParser()
 successful = config.read(prefs_file)
