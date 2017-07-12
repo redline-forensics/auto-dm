@@ -11,10 +11,12 @@ def build_prefs_file():
 
 def add_section(section):
     config.add_section(section)
+    write()
 
 
 def set(section, option, value):
     config.set(section, option, value)
+    write()
 
 
 def write():
