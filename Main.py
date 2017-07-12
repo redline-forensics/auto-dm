@@ -1,5 +1,6 @@
 import os.path
 import sys
+from enum import Enum
 
 from PySide.QtGui import *
 
@@ -162,80 +163,6 @@ class TabPage(QWidget):
 
         self.init_ui()
         self.find_dirs(job_dir)
-
-    def find_dirs(self, job_dir):
-        self.job_dir = job_dir
-        self.find_drone_dir()
-        self.find_scans_dir()
-        self.find_assets_dir()
-
-    def find_drone_dir(self):
-        charlotte_drone_path = os.path.join(self.job_dir, "Drone")
-        if os.path.isdir(charlotte_drone_path):
-            self.drone_dir = charlotte_drone_path
-            return
-
-        nashville_drone_path = os.path.join(self.job_dir, *["Photographs", "Drone"])
-        if os.path.isdir(nashville_drone_path):
-            self.drone_dir = nashville_drone_path
-            return
-
-        self.drone_dir = ""
-
-    def find_scans_dir(self):
-        charlotte_scans_path = os.path.join(self.job_dir, "Scans")
-        if os.path.isdir(charlotte_scans_path):
-            self.scans_dir = charlotte_scans_path
-            return
-
-        nashville_scans_path = os.path.join(self.job_dir, "Scan Data")
-        if os.path.isdir(nashville_scans_path):
-            self.scans_dir = nashville_scans_path
-            return
-
-        self.scans_dir = ""
-
-    def find_assets_dir(self):
-        charlotte_drawings_path = os.path.join(self.job_dir, "Drawings")
-        charlotte_drawing_path = os.path.join(self.job_dir, "Drawing")
-        if os.path.isdir(charlotte_drawings_path):
-            drawings_path = charlotte_drawings_path
-        elif os.path.isdir(charlotte_drawing_path):
-            drawings_path = charlotte_drawing_path
-        else:
-            self.assets_dir = ""
-            return
-
-        charlotte_assets_path = os.path.join(drawings_path, "Assets")
-        charlotte_asset_path = os.path.join(drawings_path, "Asset")
-        if os.path.isdir(charlotte_assets_path):
-            self.assets_dir = charlotte_assets_path
-        elif os.path.isdir(charlotte_asset_path):
-            self.assets_dir = charlotte_asset_path
-        else:
-            self.assets_dir = ""
-            return
-
-    def create_assets_dir(self):
-        charlotte_drawings_path = os.path.join(self.job_dir, "Drawings")
-        charlotte_drawing_path = os.path.join(self.job_dir, "Drawing")
-        if os.path.isdir(charlotte_drawings_path):
-            drawings_path = charlotte_drawings_path
-        elif os.path.isdir(charlotte_drawing_path):
-            drawings_path = charlotte_drawing_path
-        else:
-            os.makedirs(charlotte_drawings_path)
-            drawings_path = charlotte_drawings_path
-
-        charlotte_assets_path = os.path.join(drawings_path, "Assets")
-        charlotte_asset_path = os.path.join(drawings_path, "Asset")
-        if os.path.isdir(charlotte_assets_path):
-            self.assets_dir = charlotte_assets_path
-        elif os.path.isdir(charlotte_asset_path):
-            self.assets_dir = charlotte_asset_path
-        else:
-            os.makedirs(charlotte_assets_path)
-            self.assets_dir(charlotte_assets_path)
 
     def init_ui(self):
         self.create_controls()
@@ -419,7 +346,98 @@ class TabPage(QWidget):
     def make_connections(self):
         self.assets_folder_edit.textChanged.connect(lambda text: self.assets_folder_add_button.setVisible(text == ""))
 
+        self.drone_folder_button.clicked.connect(self.open_drone_dir_button)
+        self.scans_folder_button.clicked.connect(self.open_scans_dir_button)
+        self.assets_folder_button.clicked.connect(self.open_assets_dir_button)
+
         self.assets_folder_add_button.clicked.connect(self.create_assets_dir)
+
+    def find_dirs(self, job_dir):
+        self.job_dir = job_dir
+        self.find_drone_dir()
+        self.find_scans_dir()
+        self.find_assets_dir()
+
+    def find_drone_dir(self):
+        charlotte_drone_path = os.path.join(self.job_dir, "Drone")
+        if os.path.isdir(charlotte_drone_path):
+            self.drone_dir = charlotte_drone_path
+            return
+
+        nashville_drone_path = os.path.join(self.job_dir, *["Photographs", "Drone"])
+        if os.path.isdir(nashville_drone_path):
+            self.drone_dir = nashville_drone_path
+            return
+
+        self.drone_dir = ""
+
+    def find_scans_dir(self):
+        charlotte_scans_path = os.path.join(self.job_dir, "Scans")
+        if os.path.isdir(charlotte_scans_path):
+            self.scans_dir = charlotte_scans_path
+            return
+
+        nashville_scans_path = os.path.join(self.job_dir, "Scan Data")
+        if os.path.isdir(nashville_scans_path):
+            self.scans_dir = nashville_scans_path
+            return
+
+        self.scans_dir = ""
+
+    def find_assets_dir(self):
+        charlotte_drawings_path = os.path.join(self.job_dir, "Drawings")
+        charlotte_drawing_path = os.path.join(self.job_dir, "Drawing")
+        if os.path.isdir(charlotte_drawings_path):
+            drawings_path = charlotte_drawings_path
+        elif os.path.isdir(charlotte_drawing_path):
+            drawings_path = charlotte_drawing_path
+        else:
+            self.assets_dir = ""
+            return
+
+        charlotte_assets_path = os.path.join(drawings_path, "Assets")
+        charlotte_asset_path = os.path.join(drawings_path, "Asset")
+        if os.path.isdir(charlotte_assets_path):
+            self.assets_dir = charlotte_assets_path
+        elif os.path.isdir(charlotte_asset_path):
+            self.assets_dir = charlotte_asset_path
+        else:
+            self.assets_dir = ""
+            return
+
+    def create_assets_dir(self):
+        charlotte_drawings_path = os.path.join(self.job_dir, "Drawings")
+        charlotte_drawing_path = os.path.join(self.job_dir, "Drawing")
+        if os.path.isdir(charlotte_drawings_path):
+            drawings_path = charlotte_drawings_path
+        elif os.path.isdir(charlotte_drawing_path):
+            drawings_path = charlotte_drawing_path
+        else:
+            os.makedirs(charlotte_drawings_path)
+            drawings_path = charlotte_drawings_path
+
+        charlotte_assets_path = os.path.join(drawings_path, "Assets")
+        charlotte_asset_path = os.path.join(drawings_path, "Asset")
+        if os.path.isdir(charlotte_assets_path):
+            self.assets_dir = charlotte_assets_path
+        elif os.path.isdir(charlotte_asset_path):
+            self.assets_dir = charlotte_asset_path
+        else:
+            os.makedirs(charlotte_assets_path)
+            self.assets_dir(charlotte_assets_path)
+
+    def _open_dir_button(self):
+        return QFileDialog.getExistingDirectory(self, "", self.job_dir)
+
+    def open_drone_dir_button(self):
+        self.drone_dir = self._open_dir_button()
+
+    def open_scans_dir_button(self):
+        self.scans_dir = self._open_dir_button()
+
+    def open_assets_dir_button(self):
+        self.assets_dir = self._open_dir_button()
+
 
 
 if __name__ == '__main__':
