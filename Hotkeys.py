@@ -1,4 +1,4 @@
-from threading import Thread
+from PySide.QtCore import QThread, Signal
 
 from pywinauto.win32_hooks import Hook
 from pywinauto.win32_hooks import KeyboardEvent
@@ -17,22 +17,30 @@ def unhook():
     hk.stop()
 
 
-def _on_event(args):
-    global hotkeys
-    if isinstance(args, KeyboardEvent):
-        if args.event_type != "key down":
-            return
+class HotkeyRunner(QThread):
+    hk_activated = Signal(object)
 
-        for hotkey in hotkeys.itervalues():
-            if args.current_key == hotkey["key"] and all(
-                            modifier in args.pressed_key for modifier in hotkey["modifiers"]):
-                hotkey["action"]()
-                print(
-                    "HOTKEY " + " + ".join(str(modifier) for modifier in hotkey["modifiers"]) + " + " + str(
-                        hotkey["key"]))
+    def run(self):
+        global hk
+        hk = Hook()
+        hk.handler = self._on_event
+        hk.hook()
+
+    def _on_event(self, args):
+        global hotkeys
+        if isinstance(args, KeyboardEvent):
+            if args.event_type != "key down":
+                return
+
+            for hotkey in hotkeys.itervalues():
+                if args.current_key == hotkey["key"] and all(
+                                modifier in args.pressed_key for modifier in hotkey["modifiers"]):
+                    self.hk_activated.emit(hotkey["action"])
+                    print(
+                        "HOTKEY " + " + ".join(str(modifier) for modifier in hotkey["modifiers"]) + " + " + str(
+                            hotkey["key"]))
 
 
-hk = Hook()
-hk.handler = _on_event
-thread = Thread(target=hk.hook, args=())
-thread.start()
+hotkey_runner = HotkeyRunner()
+hotkey_runner.hk_activated.connect(lambda fn: fn())
+hotkey_runner.start()

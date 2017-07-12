@@ -32,7 +32,11 @@ class MainUI(QWidget):
 
     def init_hotkeys(self):
         # Format: Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.woi)
-        pass
+        Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.add_job_hotkey)
+
+    def add_job_hotkey(self):
+        self.restore_window("hotkey")
+        self.job_num_edit.selectAll()
 
     def create_controls(self):
         self.job_num_edit = QLineEdit()
@@ -113,10 +117,13 @@ class MainUI(QWidget):
             self.hide()
             event.ignore()
 
-    def restore_window(self, reason):
+    def restore_window(self, reason=None):
         if reason == QSystemTrayIcon.DoubleClick:
             self.tray_icon.hide()
             self.showNormal()
+        else:
+            self.showNormal()
+            self.activateWindow()
 
 
 class TabPage(QWidget):
