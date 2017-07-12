@@ -1,6 +1,5 @@
 import os.path
 import sys
-from enum import Enum
 
 from PySide.QtGui import *
 
@@ -345,12 +344,12 @@ class TabPage(QWidget):
 
     def make_connections(self):
         self.assets_folder_edit.textChanged.connect(lambda text: self.assets_folder_add_button.setVisible(text == ""))
-
-        self.drone_folder_button.clicked.connect(self.open_drone_dir_button)
-        self.scans_folder_button.clicked.connect(self.open_scans_dir_button)
-        self.assets_folder_button.clicked.connect(self.open_assets_dir_button)
-
+        self.drone_folder_button.clicked.connect(self.choose_drone_dir)
+        self.scans_folder_button.clicked.connect(self.choose_scans_dir)
+        self.assets_folder_button.clicked.connect(self.choose_assets_dir)
         self.assets_folder_add_button.clicked.connect(self.create_assets_dir)
+
+        self.open_job_folder_button.clicked.connect(self.open_job_folder)
 
     def find_dirs(self, job_dir):
         self.job_dir = job_dir
@@ -424,20 +423,28 @@ class TabPage(QWidget):
             self.assets_dir = charlotte_asset_path
         else:
             os.makedirs(charlotte_assets_path)
-            self.assets_dir(charlotte_assets_path)
+            self.assets_dir = charlotte_assets_path
 
-    def _open_dir_button(self):
+    def _choose_dir(self):
         return QFileDialog.getExistingDirectory(self, "", self.job_dir)
 
-    def open_drone_dir_button(self):
-        self.drone_dir = self._open_dir_button()
+    def choose_drone_dir(self):
+        choose_dir = self._choose_dir()
+        if choose_dir != "":
+            self.drone_dir = choose_dir
 
-    def open_scans_dir_button(self):
-        self.scans_dir = self._open_dir_button()
+    def choose_scans_dir(self):
+        choose_dir = self._choose_dir()
+        if choose_dir != "":
+            self.scans_dir = choose_dir
 
-    def open_assets_dir_button(self):
-        self.assets_dir = self._open_dir_button()
+    def choose_assets_dir(self):
+        choose_dir = self._choose_dir()
+        if choose_dir != "":
+            self.assets_dir = choose_dir
 
+    def open_job_folder(self):
+        QDesktopServices.openUrl(QUrl("file:{}".format(self.job_dir), QUrl.TolerantMode))
 
 
 if __name__ == '__main__':
