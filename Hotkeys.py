@@ -15,6 +15,8 @@ def add_hotkey(key, modifiers, action):
 
 def unhook():
     hk.stop()
+    hotkey_runner.quit()
+    hotkey_runner.wait()
 
 
 class HotkeyRunner(QThread):

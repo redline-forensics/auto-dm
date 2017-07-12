@@ -19,7 +19,7 @@ class MainUI(QWidget):
 
     def init_ui(self):
         main_icon = QIcon(os.path.join(icon_path, "main.png"))
-        self.tray_icon = QSystemTrayIcon(main_icon)
+        self.init_systray(main_icon)
         self.setWindowTitle("AutoDM")
         self.setWindowIcon(main_icon)
         self.resize(660, 362)
@@ -30,12 +30,20 @@ class MainUI(QWidget):
 
         self.show()
 
+    def init_systray(self, icon):
+        self.tray_icon = QSystemTrayIcon(icon)
+
+        menu = QMenu()
+        menu.addAction("Exit")
+
+        self.tray_icon.setContextMenu(menu)
+
     def init_hotkeys(self):
         # Format: Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.woi)
         Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.add_job_hotkey)
 
     def add_job_hotkey(self):
-        self.restore_window("hotkey")
+        self.restore_window()
         self.job_num_edit.selectAll()
 
     def create_controls(self):
@@ -121,7 +129,8 @@ class MainUI(QWidget):
         if reason == QSystemTrayIcon.DoubleClick:
             self.tray_icon.hide()
             self.showNormal()
-        else:
+        elif reason is None:
+            self.tray_icon.hide()
             self.showNormal()
             self.activateWindow()
 
