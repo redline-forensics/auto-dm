@@ -1,5 +1,6 @@
 import os.path
 import sys
+import Hotkeys
 
 from PySide.QtGui import *
 
@@ -14,6 +15,7 @@ class MainUI(QWidget):
         super(MainUI, self).__init__()
         self.jobs_dict = dict()
         self.init_ui()
+        self.init_hotkeys()
 
     def init_ui(self):
         main_icon = QIcon(os.path.join(icon_path, "main.png"))
@@ -27,6 +29,10 @@ class MainUI(QWidget):
         self.make_connections()
 
         self.show()
+
+    def init_hotkeys(self):
+        # Format: Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.woi)
+        pass
 
     def create_controls(self):
         self.job_num_edit = QLineEdit()
@@ -100,6 +106,7 @@ class MainUI(QWidget):
         reply = QMessageBox.question(self, "Message", "Are you sure you want to quit?",
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
+            Hotkeys.unhook()
             event.accept()
         else:
             self.tray_icon.show()
