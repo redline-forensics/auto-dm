@@ -2,12 +2,13 @@ import os
 import re
 import time
 import warnings
+import win32gui
 
-from PySide.QtCore import QThread, Signal
+import pyttsx
+from PySide.QtCore import QThread, Signal, Qt
 from PySide.QtGui import QMessageBox
 from pywinauto import Application, keyboard, clipboard
 from pywinauto.timings import TimeoutError
-import win32gui
 
 import CustomWidgets
 import Preferences
@@ -18,6 +19,14 @@ warnings.filterwarnings("error")
 
 def _run_on_ui(fn):
     fn()
+
+
+def get_pixel_colour(x, y):
+    desktop_window_id = win32gui.GetDesktopWindow()
+    desktop_window_dc = win32gui.GetWindowDC(desktop_window_id)
+    long_color = win32gui.GetPixel(desktop_window_dc, x, y)
+    color = int(long_color)
+    return (color & 0xff), ((color >> 8) & 0xff), ((color >> 16) & 0xff)
 
 
 class Bot(object):
@@ -68,6 +77,10 @@ class Bot(object):
         if response == QMessageBox.StandardButton.Yes:
             self.worker.set_ignore_bitness_error(True)
             self.worker.start()
+
+    def show_license_unavailable(self):
+        license_unavailable_dlg = CustomWidgets.NoLicensesDialog(self.parent)
+        license_unavailable_dlg.show()
 
     class Worker(QThread):
         run_on_ui = Signal(object)
@@ -172,7 +185,22 @@ class Bot(object):
 
                 license_dlg = self.app["Pix4Ddesktop Login"]
                 license_dlg.wait("visible", 10)
-                license_dlg.wait_not("exists", 60)
+                license_dlg.set_focus()
+
+                time.sleep(1)
+
+                no_license_location = license_dlg.ClientToScreen((237, 215))
+                no_license_color = get_pixel_colour(no_license_location[0], no_license_location[1])
+
+                if no_license_color[0] == 255 and no_license_color[1] < 255 and no_license_color[2] < 255:
+                    self.run_on_ui.emit(self.parent.show_license_unavailable)
+                else:
+                    print("License available")
+
+                try:
+                    license_dlg.wait_not("exists", 120)
+                except TimeoutError:
+                    license_dlg.Close()
             except TimeoutError:
                 return
 
