@@ -1,12 +1,15 @@
 import os
 import re
+import time
 import warnings
-import CustomWidgets
 
 from PySide.QtCore import QThread, Signal
 from PySide.QtGui import QMessageBox
-from pywinauto import Application
+from pywinauto import Application, keyboard, clipboard
 from pywinauto.timings import TimeoutError
+
+import CustomWidgets
+import Preferences
 
 
 class Bot(QThread):
@@ -59,14 +62,55 @@ class Bot(QThread):
             else:
                 return
 
-        login_dlg = self.app["Pix4Ddesktop Login"]
+        pix4d_wnd = None
+
+        t_end = time.time() + 10
+        while time.time() < t_end:
+            top_wnd = self.app.top_window()
+            if top_wnd is not None:
+                pix4d_wnd = top_wnd
+                break
+
+        wnd_title = pix4d_wnd.WindowText()
+
+        if wnd_title == "Pix4Ddesktop Login":
+            self._login(pix4d_wnd)
+            print("logged in")
+        if wnd_title == "Pix4Dmapper Pro":
+            print("logged in")
+
+        self.run_on_ui.emit(_startup_hide_loading)
+
+    def _login(self, login_dlg):
         try:
             login_dlg.wait("exists", 10)
         except TimeoutError:
             self.run_on_ui.emit(_startup_hide_loading)
             self.run_on_ui.emit(_startup_show_timeout)
             return
-        self.run_on_ui.emit(_startup_hide_loading)
+
+        email = Preferences.get_pix4d_email()
+        if email != "":
+            login_dlg.click_input(coords=(45, 170))
+            keyboard.SendKeys("^a^c")
+            if clipboard.GetData() != email:
+                keyboard.SendKeys("{BACK}")
+                keyboard.SendKeys(email)
+
+        password = Preferences.get_pix4d_password()
+        if password != "":
+            login_dlg.click_input(coords=(45, 195))
+            keyboard.SendKeys("^a^c{BACK}")
+            keyboard.SendKeys(password)
+
+        login_dlg.click_input(coords=(45, 220))
+
+        license_dlg = self.app["Pix4Ddesktop Login"]
+        try:
+            license_dlg.wait("exists", 10)
+            license_dlg.wait_not("exists")
+        except TimeoutError:
+            return
 
     def stop(self):
         if self.app is not None:
