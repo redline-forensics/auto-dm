@@ -6,19 +6,16 @@ import CustomWidgets
 from PySide.QtCore import QThread, Qt, Signal
 from PySide.QtGui import QMessageBox
 from pywinauto import Application
+from pywinauto.timings import TimeoutError
 
 
 class Bot(QThread):
-    startup_started = Signal(object)
-    startup_finished = Signal()
+    run_on_ui = Signal(object)
 
     def __init__(self):
         # QThread.__init__(self, parent)
         super(Bot, self).__init__()
         self.parent = None
-
-        self.startup_started.connect(startup_show_loading)
-        self.startup_finished.connect(startup_hide_loading)
 
         self.app = None
 
@@ -40,7 +37,7 @@ class Bot(QThread):
             raise IOError("Pix4D installation not found")
             # TODO: Manual entry of Pix4D location
 
-        self.startup_started.emit(self.parent)
+        self.run_on_ui.emit(_startup_show_loading)
         try:
             self.app = Application().start(pix4d_exe)
         except UserWarning as user_warning:
@@ -63,8 +60,13 @@ class Bot(QThread):
                 return
 
         login_dlg = self.app["Pix4Ddesktop Login"]
-        login_dlg.wait("exists", 10)
-        self.startup_finished.emit()
+        try:
+            login_dlg.wait("exists", 10)
+        except TimeoutError:
+            self.run_on_ui.emit(_startup_hide_loading)
+            self.run_on_ui.emit(_startup_show_timeout)
+            return
+        self.run_on_ui.emit(_startup_hide_loading)
 
     def stop(self):
         if self.app is not None:
@@ -75,23 +77,36 @@ def start_bot(parent=None):
     bot.set_parent(parent)
     bot.start()
 
+    global _parent
+    _parent = parent
+
 
 def stop_bot():
     bot.stop()
     bot.quit()
 
 
-def startup_show_loading(parent):
-    global loading_dlg
-    loading_dlg = CustomWidgets.IndefiniteProgressDialog("Loading...", "Loading Pix4D...", parent)
-    loading_dlg.show()
+def _startup_show_loading():
+    global _loading_dlg
+    _loading_dlg = CustomWidgets.IndefiniteProgressDialog("Loading...", "Loading Pix4D...", _parent)
+    _loading_dlg.show()
 
 
-def startup_hide_loading():
-    global loading_dlg
-    if loading_dlg is not None:
-        loading_dlg.done(0)
+def _startup_hide_loading():
+    if _loading_dlg is not None:
+        _loading_dlg.done(0)
+
+
+def _startup_show_timeout():
+    QMessageBox.warning(_parent, "Timed Out", "Could not open Pix4D.")
+
+
+def run_on_ui(fn):
+    fn()
 
 
 warnings.filterwarnings("error")
 bot = Bot()
+bot.run_on_ui.connect(run_on_ui)
+_parent = None
+_loading_dlg = None
