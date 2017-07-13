@@ -103,7 +103,7 @@ class MainUI(QWidget):
                 return
 
         self.jobs_dict[num] = self.jobs_dict.get(num, 0) + 1
-        tab_page = TabPage(job_dir)
+        tab_page = TabPage(num, job_dir)
         self.jobs_tab_widget.insertTab(0, tab_page, "J" + str(num))
         self.jobs_tab_widget.setCurrentIndex(0)
 
@@ -188,11 +188,12 @@ class TabPage(QWidget):
 
     # endregion
 
-    def __init__(self, job_dir):
+    def __init__(self, job_num, job_dir):
         super(TabPage, self).__init__()
 
         self.init_ui()
         self.find_dirs(job_dir)
+        self.job_num = job_num
 
     def init_ui(self):
         self.create_controls()
@@ -478,7 +479,8 @@ class TabPage(QWidget):
         QDesktopServices.openUrl(QUrl("file:{}".format(self.job_dir), QUrl.TolerantMode))
 
     def run_pix4d_bot(self):
-        Pix4DBot.start_bot(self)
+        self.pix4d_bot = Pix4DBot.Bot(self.job_num, self)
+        self.pix4d_bot.start()
 
 
 if __name__ == '__main__':
