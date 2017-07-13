@@ -2,6 +2,7 @@ import os.path
 import sys
 
 from PySide.QtGui import *
+from enum import Enum
 
 import Hotkeys
 import Pix4DBot
@@ -9,6 +10,11 @@ from JobDirFinder import *
 
 resource_path = os.path.join(os.path.split(__file__)[0], "resources")
 icon_path = os.path.join(resource_path, "icons")
+
+
+class JobType(Enum):
+    SITE = 1
+    VEHICLE = 2
 
 
 class MainUI(QWidget):
@@ -379,7 +385,7 @@ class TabPage(QWidget):
 
         self.open_job_folder_button.clicked.connect(self.open_job_folder)
 
-        self.pix4d_site_button.clicked.connect(self.run_pix4d_bot)
+        self.pix4d_site_button.clicked.connect(self.run_pix4d_bot_site)
 
     def find_dirs(self, job_dir):
         self.job_dir = job_dir
@@ -478,8 +484,8 @@ class TabPage(QWidget):
     def open_job_folder(self):
         QDesktopServices.openUrl(QUrl("file:{}".format(self.job_dir), QUrl.TolerantMode))
 
-    def run_pix4d_bot(self):
-        self.pix4d_bot = Pix4DBot.Bot(self.job_num, self)
+    def run_pix4d_bot_site(self):
+        self.pix4d_bot = Pix4DBot.Bot(self.job_num, JobType["SITE"], parent=self)
         self.pix4d_bot.start()
 
 

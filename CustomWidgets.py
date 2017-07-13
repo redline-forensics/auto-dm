@@ -8,6 +8,7 @@ class IndefiniteProgressDialog(QDialog):
         self.setWindowTitle(title)
         self.message = message
         self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
 
         self.init_ui()
 

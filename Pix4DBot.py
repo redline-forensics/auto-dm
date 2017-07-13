@@ -7,9 +7,11 @@ from PySide.QtCore import QThread, Signal
 from PySide.QtGui import QMessageBox
 from pywinauto import Application, keyboard, clipboard
 from pywinauto.timings import TimeoutError
+import win32gui
 
 import CustomWidgets
 import Preferences
+from Main import JobType
 
 warnings.filterwarnings("error")
 
@@ -19,9 +21,18 @@ def _run_on_ui(fn):
 
 
 class Bot(object):
-    def __init__(self, job_num, parent=None):
+    def __init__(self, job_num, job_type, vehicle=None, parent=None):
         self.job_num = job_num
+        self.job_type = job_type
         self.parent = parent
+
+        if JobType(job_type.value) is JobType.SITE:
+            print("site")
+            self.proj_name = "J{:d}_Site".format(job_num)
+        elif JobType(job_type.value) is JobType.VEHICLE:
+            print("vehicle")
+            self.proj_name = "J{:d}_{}".format(job_num, vehicle)
+
         self.worker = Bot.Worker(self)
         self.worker.run_on_ui.connect(_run_on_ui)
         self.loading_dlg = None
@@ -33,12 +44,11 @@ class Bot(object):
         self.worker.stop()
         self.worker.quit()
 
-    def startup_show_loading(self):
-        if self.loading_dlg is None:
-            self.loading_dlg = CustomWidgets.IndefiniteProgressDialog("Loading...", "Loading Pix4D...", self.parent)
+    def show_loading(self, message, title="Loading..."):
+        self.loading_dlg = CustomWidgets.IndefiniteProgressDialog(title, message, self.parent)
         self.loading_dlg.show()
 
-    def startup_hide_loading(self):
+    def hide_loading(self):
         if self.loading_dlg is not None:
             self.loading_dlg.done(0)
             self.loading_dlg = None
@@ -69,7 +79,7 @@ class Bot(object):
             self.app = None
 
         def run(self):
-            self.run_on_ui.emit(self.parent.startup_show_loading)
+            self.run_on_ui.emit(lambda: self.parent.show_loading("Loading Pix4D..."))
             if not self.get_app():
                 return
 
@@ -82,13 +92,18 @@ class Bot(object):
                     pix4d_wnd = top_wnd
                     break
 
-            self.run_on_ui.emit(self.parent.startup_hide_loading)
+            self.run_on_ui.emit(self.parent.hide_loading)
 
             wnd_title = pix4d_wnd.WindowText()
 
             if wnd_title == "Pix4Ddesktop Login":
                 self._login(pix4d_wnd)
                 pix4d_wnd = self.app.window(title_re="Pix4Ddiscovery.*")
+                try:
+                    pix4d_wnd.wait("exists", 10)
+                except TimeoutError:
+                    print("Exiting")
+                    return
                 self._new_project(pix4d_wnd)
             elif "Pix4Ddiscovery" in wnd_title:
                 self._new_project(pix4d_wnd)
@@ -120,7 +135,7 @@ class Bot(object):
                     self.app = Application().start(pix4d_exe)
                 return True
             except UserWarning as user_warning:
-                self.run_on_ui.emit(self.parent.startup_hide_loading)
+                self.run_on_ui.emit(self.parent.hide_loading)
 
                 warning_nums = re.findall(r"\d+", str(user_warning))
                 pix4d_bitness = int(warning_nums[0])
@@ -133,7 +148,7 @@ class Bot(object):
             try:
                 login_dlg.wait("exists", 10)
             except TimeoutError:
-                self.run_on_ui.emit(self.parent.startup_hide_loading)
+                self.run_on_ui.emit(self.parent.hide_loading)
                 self.run_on_ui.emit(self.parent.startup_show_timeout)
                 return
 
@@ -151,18 +166,28 @@ class Bot(object):
                 keyboard.SendKeys("^a^c{BACK}")
                 keyboard.SendKeys(password)
 
-            login_dlg.click_input(coords=(45, 220))
-
-            license_dlg = self.app["Pix4Ddesktop Login"]
             try:
-                license_dlg.wait("exists", 10)
-                license_dlg.wait_not("exists")
+                login_dlg.click_input(coords=(45, 220))
+                login_dlg.wait_not("visible")
+
+                license_dlg = self.app["Pix4Ddesktop Login"]
+                license_dlg.wait("visible", 10)
+                license_dlg.wait_not("exists", 60)
             except TimeoutError:
                 return
 
         def _new_project(self, main_wnd):
-            main_wnd.set_keyboard_focus()
+            main_wnd.set_focus()
             keyboard.SendKeys("^n")
+
+            new_proj_wnd = self.app["New Project"]
+            self.run_on_ui.emit(lambda: self.parent.show_loading("Loading New Project..."))
+            new_proj_wnd.wait("exists", 10)
+            self.run_on_ui.emit(self.parent.hide_loading)
+            new_proj_wnd.set_focus()
+            new_proj_wnd.click_input(coords=(90, 130))
+
+            keyboard.SendKeys(self.parent.proj_name)
 
         def stop(self):
             if self.app is not None:
