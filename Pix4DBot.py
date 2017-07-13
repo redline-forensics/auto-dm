@@ -3,7 +3,7 @@ import re
 import warnings
 import CustomWidgets
 
-from PySide.QtCore import QThread, Qt, Signal
+from PySide.QtCore import QThread, Signal
 from PySide.QtGui import QMessageBox
 from pywinauto import Application
 from pywinauto.timings import TimeoutError
@@ -101,12 +101,12 @@ def _startup_show_timeout():
     QMessageBox.warning(_parent, "Timed Out", "Could not open Pix4D.")
 
 
-def run_on_ui(fn):
+def _run_on_ui(fn):
     fn()
 
 
 warnings.filterwarnings("error")
 bot = Bot()
-bot.run_on_ui.connect(run_on_ui)
+bot.run_on_ui.connect(_run_on_ui)
 _parent = None
 _loading_dlg = None
