@@ -11,16 +11,20 @@ from pywinauto.timings import TimeoutError
 import CustomWidgets
 import Preferences
 
-
 warnings.filterwarnings("error")
+
+
+def _run_on_ui(fn):
+    fn()
 
 
 class Bot(object):
     def __init__(self, job_num, parent=None):
         self.job_num = job_num
         self.parent = parent
-        self.worker = Bot.Worker()
-        self.worker.run_on_ui.connect(self._run_on_ui)
+        self.worker = Bot.Worker(self)
+        self.worker.run_on_ui.connect(_run_on_ui)
+        self.loading_dlg = None
 
     def start(self):
         self.worker.start()
@@ -29,34 +33,70 @@ class Bot(object):
         self.worker.stop()
         self.worker.quit()
 
-    def _startup_show_loading(self):
-        self.loading_dlg = CustomWidgets.IndefiniteProgressDialog("Loading...", "Loading Pix4D...", self.parent)
+    def startup_show_loading(self):
+        if self.loading_dlg is None:
+            self.loading_dlg = CustomWidgets.IndefiniteProgressDialog("Loading...", "Loading Pix4D...", self.parent)
         self.loading_dlg.show()
 
-    def _startup_hide_loading(self):
+    def startup_hide_loading(self):
         if self.loading_dlg is not None:
             self.loading_dlg.done(0)
+            self.loading_dlg = None
 
-    def _startup_show_timeout(self):
+    def startup_show_timeout(self):
         QMessageBox.warning(self.parent, "Timed Out", "Could not open Pix4D.")
 
-    def _run_on_ui(self, fn):
-        fn(self)
+    def show_bitness_error(self, pix4d_bitness, python_bitness):
+        self.stop()
+
+        flags = QMessageBox.StandardButton.Yes
+        flags |= QMessageBox.StandardButton.No
+        response = QMessageBox.warning(self.parent, "Warning",
+                                       "Attempting to start {:d}-bit Pix4D using {:d}-bit Python. Unexpected "
+                                       "behavior may occur. Proceed?".format(pix4d_bitness, python_bitness),
+                                       flags)
+        if response == QMessageBox.StandardButton.Yes:
+            self.worker.set_ignore_bitness_error(True)
+            self.worker.start()
 
     class Worker(QThread):
         run_on_ui = Signal(object)
 
-        def __init__(self):
-            # QThread.__init__(self, parent)
+        def __init__(self, parent):
             super(Bot.Worker, self).__init__()
-            self.parent = None
-
+            self.parent = parent
+            self.ignore_bitness_error = False
             self.app = None
 
-        def set_parent(self, parent):
-            self.parent = parent
-
         def run(self):
+            self.run_on_ui.emit(self.parent.startup_show_loading)
+            if not self.get_app():
+                return
+
+            pix4d_wnd = None
+
+            t_end = time.time() + 10
+            while time.time() < t_end:
+                top_wnd = self.app.top_window()
+                if top_wnd is not None:
+                    pix4d_wnd = top_wnd
+                    break
+
+            self.run_on_ui.emit(self.parent.startup_hide_loading)
+
+            wnd_title = pix4d_wnd.WindowText()
+
+            if wnd_title == "Pix4Ddesktop Login":
+                self._login(pix4d_wnd)
+                pix4d_wnd = self.app.window(title_re="Pix4Ddiscovery.*")
+                self._new_project(pix4d_wnd)
+            elif "Pix4Ddiscovery" in wnd_title:
+                self._new_project(pix4d_wnd)
+
+        def set_ignore_bitness_error(self, ignore):
+            self.ignore_bitness_error = ignore
+
+        def get_app(self):
             program_files_32 = os.environ["ProgramW6432"]
             program_files_64 = os.environ["ProgramFiles(x86)"]
 
@@ -71,54 +111,30 @@ class Bot(object):
                 raise IOError("Pix4D installation not found")
                 # TODO: Manual entry of Pix4D location
 
-            self.run_on_ui.emit(Bot._startup_show_loading)
             try:
-                self.app = Application().start(pix4d_exe)
-            except UserWarning as user_warning:
-                warning_nums = re.findall(r"\d+", str(user_warning))
-
-                pix4d_bitness = int(warning_nums[0])
-                python_bitness = int(warning_nums[1])
-
-                flags = QMessageBox.StandardButton.Yes
-                flags |= QMessageBox.StandardButton.No
-                response = QMessageBox.warning(self.parent, "Warning",
-                                               "Attempting to start {:d}-bit Pix4D using {:d}-bit Python. Unexpected "
-                                               "behavior may occur. Proceed?".format(pix4d_bitness, python_bitness),
-                                               flags)
-                if response == QMessageBox.StandardButton.Yes:
+                if self.ignore_bitness_error:
                     with warnings.catch_warnings():
                         warnings.simplefilter("ignore")
                         self.app = Application().start(pix4d_exe)
                 else:
-                    return
+                    self.app = Application().start(pix4d_exe)
+                return True
+            except UserWarning as user_warning:
+                self.run_on_ui.emit(self.parent.startup_hide_loading)
 
-            pix4d_wnd = None
+                warning_nums = re.findall(r"\d+", str(user_warning))
+                pix4d_bitness = int(warning_nums[0])
+                python_bitness = int(warning_nums[1])
+                self.run_on_ui.emit(lambda: self.parent.show_bitness_error(pix4d_bitness, python_bitness))
 
-            t_end = time.time() + 10
-            while time.time() < t_end:
-                top_wnd = self.app.top_window()
-                if top_wnd is not None:
-                    pix4d_wnd = top_wnd
-                    break
-
-            wnd_title = pix4d_wnd.WindowText()
-
-            if wnd_title == "Pix4Ddesktop Login":
-                self._login(pix4d_wnd)
-                pix4d_wnd = self.app.window(title_re="Pix4Ddiscovery.*")
-                self._new_project(pix4d_wnd)
-            elif "Pix4Ddiscovery" in wnd_title:
-                self._new_project(pix4d_wnd)
-
-            self.run_on_ui.emit(Bot._startup_hide_loading)
+                return False
 
         def _login(self, login_dlg):
             try:
                 login_dlg.wait("exists", 10)
             except TimeoutError:
-                self.run_on_ui.emit(Bot._startup_hide_loading)
-                self.run_on_ui.emit(Bot._startup_show_timeout)
+                self.run_on_ui.emit(self.parent.startup_hide_loading)
+                self.run_on_ui.emit(self.parent.startup_show_timeout)
                 return
 
             email = Preferences.get_pix4d_email()
