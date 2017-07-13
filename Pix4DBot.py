@@ -75,9 +75,10 @@ class Bot(QThread):
 
         if wnd_title == "Pix4Ddesktop Login":
             self._login(pix4d_wnd)
-            print("logged in")
-        if wnd_title == "Pix4Dmapper Pro":
-            print("logged in")
+            pix4d_wnd = self.app.window(title_re="Pix4Ddiscovery.*")
+            self._new_project(pix4d_wnd)
+        elif "Pix4Ddiscovery" in wnd_title:
+            self._new_project(pix4d_wnd)
 
         self.run_on_ui.emit(_startup_hide_loading)
 
@@ -112,17 +113,21 @@ class Bot(QThread):
         except TimeoutError:
             return
 
+    def _new_project(self, main_wnd):
+        main_wnd.set_keyboard_focus()
+        keyboard.SendKeys("^n")
+
     def stop(self):
         if self.app is not None:
             self.app.kill_()
 
 
-def start_bot(parent=None):
-    bot.set_parent(parent)
+def start_bot(job_num, parent=None):
     bot.start()
 
-    global _parent
+    global _parent, _job_num
     _parent = parent
+    _job_num = job_num
 
 
 def stop_bot():
@@ -153,4 +158,5 @@ warnings.filterwarnings("error")
 bot = Bot()
 bot.run_on_ui.connect(_run_on_ui)
 _parent = None
+_job_num = None
 _loading_dlg = None
