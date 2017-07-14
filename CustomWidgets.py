@@ -1,7 +1,6 @@
 import pyttsx
 from PySide.QtCore import Qt
-from PySide.QtGui import QDialog, QProgressBar, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QWidget, QMainWindow
-from pywinauto import Application, keyboard, clipboard
+from PySide.QtGui import QDialog, QProgressBar, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QWidget
 
 from Main import JobType
 
