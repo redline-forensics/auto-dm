@@ -1,10 +1,10 @@
 import os
 import re
+import shutil
 import time
 import warnings
 import win32gui
 from win32api import GetSystemMetrics
-import shutil
 
 from PySide.QtCore import QThread, Signal, Qt
 from PySide.QtGui import QMessageBox, QFileDialog, QProgressDialog
@@ -23,7 +23,11 @@ def _run_on_ui(fn):
     fn()
 
 
-def get_pixel_colour(x, y):
+def get_pixel_colour(x, y, window=None):
+    if window is not None:
+        point = window.ClientToScreen((x, y))
+        x = point[0]
+        y = point[1]
     desktop_window_id = win32gui.GetDesktopWindow()
     desktop_window_dc = win32gui.GetWindowDC(desktop_window_id)
     long_color = win32gui.GetPixel(desktop_window_dc, x, y)
@@ -86,6 +90,30 @@ class Bot(object):
         license_unavailable_dlg = CustomWidgets.NoLicensesDialog(self.parent)
         license_unavailable_dlg.show()
 
+    def show_project_already_exists(self):
+        flags = QMessageBox.StandardButton.Yes
+        flags |= QMessageBox.StandardButton.No
+        response = QMessageBox.warning(self.drone_tool, "Project Already Exists",
+                                       "The project folder \"{}\" already exists. Would you like to "
+                                       "overwrite it?".format(self.proj_name), flags)
+        if response == QMessageBox.StandardButton.Yes:
+            if os.path.exists(self.proj_path + ".p4d"):
+                backup_path = self.proj_path + "_bak"
+                if os.path.exists(backup_path + ".p4d"):
+                    for x in range(0, 99):
+                        try:
+                            os.rename(self.proj_path + ".p4d", backup_path + str(x) + ".p4d")
+                            break
+                        except OSError:
+                            continue
+                else:
+                    os.rename(self.proj_path + ".p4d", backup_path + ".p4d")
+            self.worker.new_project()
+
+    def show_unable_to_select_images(self):
+        QMessageBox.warning(self.drone_tool, "Image Selection Error",
+                            "Unable to add images. Please complete the New Project wizard manually.")
+
     def show_drone_tool(self):
         self.drone_tool = CustomWidgets.DroneTool(self.job_type, self.parent)
         self.drone_tool.copy_pictures_button.clicked.connect(self.copy_pictures)
@@ -102,7 +130,7 @@ class Bot(object):
     def copy_pictures(self):
         if not os.path.exists(self.proj_path):
             os.makedirs(self.proj_path)
-        pic_files = QFileDialog.getOpenFileNames(self.parent, "Select Drone Pictures", self.drone_dir,
+        pic_files = QFileDialog.getOpenFileNames(self.drone_tool, "Select Drone Pictures", self.drone_dir,
                                                  "All supported image formats (*.jpg *.jpeg *.tif *.tiff)"
                                                  ";;JPEG images (*.jpg *.jpeg);;TIFF images (*.tif *.tiff)")[0]
         num_pic_files = len(pic_files)
@@ -110,7 +138,8 @@ class Bot(object):
             return
 
         self.picture_copier = self.PictureCopier(pic_files, self)
-        progress_dlg = QProgressDialog("Copying images...", "Cancel", 0, num_pic_files, self.parent)
+        progress_dlg = QProgressDialog("Copying images...", "Cancel", 0, num_pic_files, self.drone_tool)
+        progress_dlg.setWindowTitle("Copying...")
         progress_dlg.setWindowModality(Qt.WindowModal)
         progress_dlg.canceled.connect(self.picture_copier.cancel)
         self.picture_copier.update_progress.connect(progress_dlg.setValue)
@@ -249,8 +278,7 @@ class Bot(object):
 
                 time.sleep(1)
 
-                no_license_location = license_dlg.ClientToScreen((237, 215))
-                no_license_color = get_pixel_colour(no_license_location[0], no_license_location[1])
+                no_license_color = get_pixel_colour(237, 215, license_dlg)
 
                 if no_license_color[0] == 255 and no_license_color[1] < 255 and no_license_color[2] < 255:
                     self.run_on_ui.emit(self.parent.show_license_unavailable)
@@ -279,11 +307,29 @@ class Bot(object):
 
             keyboard.SendKeys(self.parent.proj_name)
             keyboard.SendKeys("{ENTER}")
-            keyboard.SendKeys("{TAB}{ENTER}")
+            already_exists_color = get_pixel_colour(28, 110, new_proj_wnd)
+            if already_exists_color[0] == 255 and already_exists_color[1] < 255 and already_exists_color[2] < 255:
+                # keyboard.SendKeys("{TAB 7}{ENTER}")
+                new_proj_wnd.close()
+                self.run_on_ui.emit(self.parent.show_project_already_exists)
+                return
 
-            select_images_dlg = self.app["Select Images"]
-            select_images_dlg.wait("exists", 10)
-            select_images_dlg.print_control_identifiers()
+            keyboard.SendKeys("{TAB}{TAB}{ENTER}")
+            select_dirs_dlg = self.app["Select Directories"]
+            select_dirs_dlg.wait("exists", 10)
+            keyboard.SendKeys(self.parent.proj_name)
+            keyboard.SendKeys("{ENTER}")
+            not_enough_images_color = get_pixel_colour(40, 92, new_proj_wnd)  # red = (237,28,36), green = (108,164,56)
+            if not_enough_images_color[0] > 220 and not_enough_images_color[1] < 50 and not_enough_images_color[2] < 50:
+                self.run_on_ui.emit(self.parent.show_unable_to_select_images)
+                return
+            keyboard.SendKeys("{UP 9}{ENTER}")
+
+            time.sleep(5)
+            keyboard.SendKeys("{TAB 5}{ENTER}")
+            keyboard.SendKeys("f")
+            keyboard.SendKeys("{TAB 5}{ENTER}")
+            keyboard.SendKeys("{HOME}{ENTER}")
 
         def stop(self):
             if self.app is not None:
