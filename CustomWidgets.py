@@ -1,6 +1,9 @@
 import pyttsx
 from PySide.QtCore import Qt
-from PySide.QtGui import QDialog, QProgressBar, QVBoxLayout, QLabel, QPushButton, QHBoxLayout
+from PySide.QtGui import QDialog, QProgressBar, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QWidget, QMainWindow
+from pywinauto import Application, keyboard, clipboard
+
+from Main import JobType
 
 
 class IndefiniteProgressDialog(QDialog):
@@ -65,3 +68,34 @@ class NoLicensesDialog(QDialog):
         tts.say("Hey fellas, does anyone have picks four dee open?")
         tts.runAndWait()
         self.done(0)
+
+
+class DroneTool(QDialog):
+    def __init__(self, job_type, parent=None):
+        super(DroneTool, self).__init__(parent)
+        self.job_type = job_type
+        if JobType(job_type.value) is JobType.SITE:
+            print("site")
+            self.setWindowTitle("Drone Site Tool")
+        elif JobType(job_type.value) is JobType.VEHICLE:
+            print("vehicle")
+            self.setWindowTitle("Drone Vehicle Tool")
+        self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setWindowFlags(self.windowFlags() | Qt.Tool | Qt.WindowStaysOnTopHint)
+        self.setModal(False)
+        self.init_ui()
+
+    def init_ui(self):
+        self.copy_pictures_button = QPushButton("Copy Pictures From Server")
+        self.new_proj_button = QPushButton("New Project")
+
+        main_layout = QVBoxLayout()
+        main_tab = QTabWidget()
+        manual_widget = QWidget()
+        manual_layout = QVBoxLayout()
+        manual_layout.addWidget(self.copy_pictures_button)
+        manual_layout.addWidget(self.new_proj_button)
+        manual_widget.setLayout(manual_layout)
+        main_tab.addTab(manual_widget, "Manual")
+        main_layout.addWidget(main_tab)
+        self.setLayout(main_layout)
