@@ -3,10 +3,11 @@ import re
 import time
 import warnings
 import win32gui
+from win32api import GetSystemMetrics
+import shutil
 
-import pyttsx
 from PySide.QtCore import QThread, Signal, Qt
-from PySide.QtGui import QMessageBox
+from PySide.QtGui import QMessageBox, QFileDialog, QProgressDialog
 from pywinauto import Application, keyboard, clipboard
 from pywinauto.timings import TimeoutError
 
@@ -15,6 +16,7 @@ import Preferences
 from Main import JobType
 
 warnings.filterwarnings("error")
+pix4d_path = os.path.expanduser("~/Documents/pix4d")
 
 
 def _run_on_ui(fn):
@@ -30,17 +32,19 @@ def get_pixel_colour(x, y):
 
 
 class Bot(object):
-    def __init__(self, job_num, job_type, vehicle=None, parent=None):
-        self.job_num = job_num
+    def __init__(self, parent, job_type, vehicle=None):
+        self.job_num = parent.job_num
+        self.drone_dir = parent.drone_dir
         self.job_type = job_type
         self.parent = parent
 
         if JobType(job_type.value) is JobType.SITE:
             print("site")
-            self.proj_name = "J{:d}_Site".format(job_num)
+            self.proj_name = "J{:d}_Site".format(self.job_num)
         elif JobType(job_type.value) is JobType.VEHICLE:
             print("vehicle")
-            self.proj_name = "J{:d}_{}".format(job_num, vehicle)
+            self.proj_name = "J{:d}_{}".format(self.job_num, vehicle)
+        self.proj_path = os.path.join(pix4d_path, self.proj_name)
 
         self.worker = Bot.Worker(self)
         self.worker.run_on_ui.connect(_run_on_ui)
@@ -82,6 +86,59 @@ class Bot(object):
         license_unavailable_dlg = CustomWidgets.NoLicensesDialog(self.parent)
         license_unavailable_dlg.show()
 
+    def show_drone_tool(self):
+        self.drone_tool = CustomWidgets.DroneTool(self.job_type, self.parent)
+        self.drone_tool.copy_pictures_button.clicked.connect(self.copy_pictures)
+        self.drone_tool.new_proj_button.clicked.connect(self.worker.new_project)
+        self.drone_tool.show()
+        self.drone_tool.setGeometry(GetSystemMetrics(0) - self.drone_tool.width() * 1.1, 200, self.drone_tool.width(),
+                                    self.drone_tool.height())
+
+    def hide_drone_tool(self):
+        if self.drone_tool is not None:
+            self.drone_tool.done(0)
+            self.drone_tool = None
+
+    def copy_pictures(self):
+        if not os.path.exists(self.proj_path):
+            os.makedirs(self.proj_path)
+        pic_files = QFileDialog.getOpenFileNames(self.parent, "Select Drone Pictures", self.drone_dir,
+                                                 "All supported image formats (*.jpg *.jpeg *.tif *.tiff)"
+                                                 ";;JPEG images (*.jpg *.jpeg);;TIFF images (*.tif *.tiff)")[0]
+        num_pic_files = len(pic_files)
+        if num_pic_files == 0:
+            return
+
+        self.picture_copier = self.PictureCopier(pic_files, self)
+        progress_dlg = QProgressDialog("Copying images...", "Cancel", 0, num_pic_files, self.parent)
+        progress_dlg.setWindowModality(Qt.WindowModal)
+        progress_dlg.canceled.connect(self.picture_copier.cancel)
+        self.picture_copier.update_progress.connect(progress_dlg.setValue)
+
+        progress_dlg.show()
+        self.picture_copier.start()
+
+    class PictureCopier(QThread):
+        update_progress = Signal(int)
+
+        def __init__(self, pic_files, parent):
+            super(Bot.PictureCopier, self).__init__()
+            self.pic_files = pic_files
+            self.canceled = False
+            self.parent = parent
+
+        def run(self):
+            print(self.pic_files)
+            for index, pic_file in enumerate(self.pic_files):
+                self.update_progress.emit(index)
+                if self.canceled:
+                    break
+                shutil.copy(pic_file, self.parent.proj_path)
+            self.update_progress.emit(len(self.pic_files))
+
+        def cancel(self):
+            self.canceled = True
+
     class Worker(QThread):
         run_on_ui = Signal(object)
 
@@ -96,30 +153,33 @@ class Bot(object):
             if not self.get_app():
                 return
 
-            pix4d_wnd = None
+            self.pix4d_wnd = None
 
             t_end = time.time() + 10
             while time.time() < t_end:
                 top_wnd = self.app.top_window()
                 if top_wnd is not None:
-                    pix4d_wnd = top_wnd
+                    self.pix4d_wnd = top_wnd
                     break
 
             self.run_on_ui.emit(self.parent.hide_loading)
 
-            wnd_title = pix4d_wnd.WindowText()
+            wnd_title = self.pix4d_wnd.WindowText()
 
             if wnd_title == "Pix4Ddesktop Login":
-                self._login(pix4d_wnd)
-                pix4d_wnd = self.app.window(title_re="Pix4Ddiscovery.*")
+                self._login(self.pix4d_wnd)
+                self.pix4d_wnd = self.app.window(title_re="Pix4Ddiscovery.*")
                 try:
-                    pix4d_wnd.wait("exists", 10)
+                    self.pix4d_wnd.wait("exists", 10)
                 except TimeoutError:
                     print("Exiting")
                     return
-                self._new_project(pix4d_wnd)
+                self.run_on_ui.emit(self.parent.show_drone_tool)
             elif "Pix4Ddiscovery" in wnd_title:
-                self._new_project(pix4d_wnd)
+                self.run_on_ui.emit(self.parent.show_drone_tool)
+
+            self.pix4d_wnd.wait_not("exists", 86400)
+            self.run_on_ui.emit(self.parent.hide_drone_tool)
 
         def set_ignore_bitness_error(self, ignore):
             self.ignore_bitness_error = ignore
@@ -204,18 +264,26 @@ class Bot(object):
             except TimeoutError:
                 return
 
-        def _new_project(self, main_wnd):
-            main_wnd.set_focus()
+        def copy_pictures(self):
+            pass
+
+        def new_project(self):
+            # self.run_on_ui.emit(lambda: self.parent.show_loading("Loading New Project..."))
+            self.pix4d_wnd.set_focus()
             keyboard.SendKeys("^n")
 
             new_proj_wnd = self.app["New Project"]
-            self.run_on_ui.emit(lambda: self.parent.show_loading("Loading New Project..."))
             new_proj_wnd.wait("exists", 10)
-            self.run_on_ui.emit(self.parent.hide_loading)
             new_proj_wnd.set_focus()
             new_proj_wnd.click_input(coords=(90, 130))
 
             keyboard.SendKeys(self.parent.proj_name)
+            keyboard.SendKeys("{ENTER}")
+            keyboard.SendKeys("{TAB}{ENTER}")
+
+            select_images_dlg = self.app["Select Images"]
+            select_images_dlg.wait("exists", 10)
+            select_images_dlg.print_control_identifiers()
 
         def stop(self):
             if self.app is not None:
