@@ -41,6 +41,8 @@ class HotkeyRunner(QThread):
                     print(
                         "HOTKEY " + " + ".join(str(modifier) for modifier in hotkey["modifiers"]) + " + " + str(
                             hotkey["key"]))
+                    hk.unhook_keyboard()
+                    hk.hook()
 
 
 hotkey_runner = HotkeyRunner()
