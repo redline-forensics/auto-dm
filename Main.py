@@ -1,6 +1,7 @@
 import os.path
 import sys
 
+import keyboard
 from PySide.QtGui import *
 from enum import Enum
 
@@ -129,6 +130,9 @@ class MainUI(QWidget):
             return True
         else:
             return super(MainUI, self).event(event)
+
+    def minimize(self):
+        self.showMinimized()
 
     def closeEvent(self, event):
         reply = QMessageBox.question(self, "Message", "Are you sure you want to quit?",
@@ -485,7 +489,7 @@ class TabPage(QWidget):
         QDesktopServices.openUrl(QUrl("file:{}".format(self.job_dir), QUrl.TolerantMode))
 
     def run_pix4d_bot_site(self):
-        self.pix4d_bot = Pix4DBot.Bot(self.job_num, JobType["SITE"], parent=self)
+        self.pix4d_bot = Pix4DBot.Bot(self, JobType["SITE"])
         self.pix4d_bot.start()
 
 
