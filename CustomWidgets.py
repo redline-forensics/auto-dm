@@ -88,6 +88,7 @@ class DroneTool(QDialog):
         self.copy_pictures_button = QPushButton("Copy Pictures From Server")
         self.new_proj_button = QPushButton("New Project")
         self.start_proc_button = QPushButton("Start Processing")
+        self.edit_mosaic_button = QPushButton("Edit Mosaic")
 
         main_layout = QVBoxLayout()
         main_tab = QTabWidget()
@@ -96,6 +97,7 @@ class DroneTool(QDialog):
         manual_layout.addWidget(self.copy_pictures_button)
         manual_layout.addWidget(self.new_proj_button)
         manual_layout.addWidget(self.start_proc_button)
+        manual_layout.addWidget(self.edit_mosaic_button)
         manual_widget.setLayout(manual_layout)
         main_tab.addTab(manual_widget, "Manual")
         main_layout.addWidget(main_tab)

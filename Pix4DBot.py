@@ -61,8 +61,10 @@ class Bot(object):
         self.worker.stop()
         self.worker.quit()
 
-    def show_loading(self, message, title="Loading..."):
-        self.loading_dlg = CustomWidgets.IndefiniteProgressDialog(title, message, self.parent)
+    def show_loading(self, message, title="Loading...", parent=None):
+        if parent is None:
+            parent = self.parent
+        self.loading_dlg = CustomWidgets.IndefiniteProgressDialog(title, message, parent)
         self.loading_dlg.show()
 
     def hide_loading(self):
@@ -119,6 +121,7 @@ class Bot(object):
         self.drone_tool.copy_pictures_button.clicked.connect(self.copy_pictures)
         self.drone_tool.new_proj_button.clicked.connect(self.worker.new_project)
         self.drone_tool.start_proc_button.clicked.connect(self.worker.start_processing)
+        self.drone_tool.edit_mosaic_button.clicked.connect(self.worker.edit_mosaic)
         self.drone_tool.show()
         self.drone_tool.setGeometry(GetSystemMetrics(0) - self.drone_tool.width() * 1.1, 200, self.drone_tool.width(),
                                     self.drone_tool.height())
@@ -367,6 +370,9 @@ class Bot(object):
                 proc_widget.click_input(coords=(633, 110))  # Start (button)
             except TimeoutError:
                 self.pix4d_wnd.click_input(coords=(704, self.pix4d_wnd.rectangle().height() - 49))  # Start (button)
+
+        def edit_mosaic(self):
+            self.pix4d_wnd.click_input(coords=(39, 313))  # Mosaic Editor (button)
 
         def stop(self):
             if self.app is not None:
