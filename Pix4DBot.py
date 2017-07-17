@@ -333,6 +333,12 @@ class Bot(object):
 
             # TODO: test
             time.sleep(1)
+            proc_widget = self.pix4d_wnd["Pix4dProcessingWidgetClassWindow"]
+            proc_widget.wait("exists", 10)
+            proc_widget.click_input(coords=(138, 27))
+            proc_widget.click_input(coords=(284, 27))
+
+            # TODO: test
             self.pix4d_wnd.click_input(coords=(38, int(self.pix4d_wnd.rectangle().height()) - 64))
             proc_opt_wnd = self.app["Processing Options"]
             proc_opt_wnd.wait("exists", 10)
