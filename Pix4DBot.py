@@ -341,6 +341,7 @@ class Bot(object):
             proc_opt_wnd.click_input(coords=(334, 179))
             keyboard.SendKeys("^a")
             keyboard.SendKeys("2")
+            keyboard.SendKeys("{ENTER}")
 
         def stop(self):
             if self.app is not None:
