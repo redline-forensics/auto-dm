@@ -118,6 +118,7 @@ class Bot(object):
         self.drone_tool = CustomWidgets.DroneTool(self.job_type, self.parent)
         self.drone_tool.copy_pictures_button.clicked.connect(self.copy_pictures)
         self.drone_tool.new_proj_button.clicked.connect(self.worker.new_project)
+        self.drone_tool.start_proc_button.clicked.connect(self.worker.start_processing)
         self.drone_tool.show()
         self.drone_tool.setGeometry(GetSystemMetrics(0) - self.drone_tool.width() * 1.1, 200, self.drone_tool.width(),
                                     self.drone_tool.height())
@@ -333,22 +334,39 @@ class Bot(object):
 
             time.sleep(1)
 
-            # TODO: test
-            proc_widget = self.pix4d_wnd["Pix4dProcessingWidgetClassWindow"]
-            proc_widget.wait("exists", 10)
-            proc_widget.click_input(coords=(138, 27))
-            proc_widget.click_input(coords=(284, 27))
+            self.pix4d_wnd.print_control_identifiers()
+
+            pix4d_wnd_height = int(self.pix4d_wnd.rectangle().height())
 
             # TODO: test
-            self.pix4d_wnd.click_input(coords=(38, int(self.pix4d_wnd.rectangle().height()) - 64))
+            proc_widget = self.pix4d_wnd["Pix4dProcessingWidgetClassWindow"]
+            try:
+                proc_widget.wait("exists", 10)
+                proc_widget.click_input(coords=(138, 27))  # 2. Point Cloud and Mesh (checkbox)
+                proc_widget.click_input(coords=(284, 27))  # 3. DSM, Orthomosaic and Index (checkbox)
+            except TimeoutError:
+                self.pix4d_wnd.click_input(coords=(209, pix4d_wnd_height - 129))  # 2. Point Cloud and Mesh (checkbox)
+                self.pix4d_wnd.click_input(
+                    coords=(354, pix4d_wnd_height - 129))  # 3. DSM, Orthomosaic and Index (checkbox)
+
+            # TODO: test
+            self.pix4d_wnd.click_input(coords=(38, pix4d_wnd_height - 64))  # Processing Options (button)
             proc_opt_wnd = self.app["Processing Options"]
             proc_opt_wnd.wait("exists", 10)
             proc_opt_wnd.set_focus()
-            proc_opt_wnd.click_input(coords=(309, 154))
-            proc_opt_wnd.click_input(coords=(334, 179))
-            keyboard.SendKeys("^a")
+            proc_opt_wnd.click_input(coords=(309, 154))  # Custom (radio)
+            proc_opt_wnd.click_input(coords=(334, 179))  # cm/pixel (textbox)
+            keyboard.SendKeys("^a")  # Ctrl+A (select all)
             keyboard.SendKeys("2")
             keyboard.SendKeys("{ENTER}")
+
+        def start_processing(self):
+            proc_widget = self.pix4d_wnd["Pix4dProcessingWidgetClassWindow"]
+            try:
+                proc_widget.wait("exists", 10)
+                proc_widget.click_input(coords=(633, 110))  # Start (button)
+            except TimeoutError:
+                self.pix4d_wnd.click_input(coords=(704, self.pix4d_wnd.rectangle().height() - 49))  # Start (button)
 
         def stop(self):
             if self.app is not None:
