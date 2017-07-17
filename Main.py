@@ -57,6 +57,12 @@ class MainUI(QWidget):
     def init_hotkeys(self):
         # Format: Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.woi)
         Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.add_job_hotkey)
+        Hotkeys.add_hotkey("T", ["Lcontrol", "Lwin"], self.test)
+
+    def test(self):
+        test_tab = self.add_job(4086, "N:\\J4086 Darby Trucking")
+        test_tab.run_pix4d_bot_site()
+
 
     def add_job_hotkey(self):
         self.restore_window()
@@ -113,6 +119,7 @@ class MainUI(QWidget):
         tab_page = TabPage(num, job_dir)
         self.jobs_tab_widget.insertTab(0, tab_page, "J" + str(num))
         self.jobs_tab_widget.setCurrentIndex(0)
+        return tab_page
 
     def remove_job(self, index):
         job_num = int(self.jobs_tab_widget.tabText(index)[1:])
