@@ -331,8 +331,9 @@ class Bot(object):
             keyboard.SendKeys("{TAB 5}{ENTER}")
             keyboard.SendKeys("{HOME}{ENTER}")
 
-            # TODO: test
             time.sleep(1)
+
+            # TODO: test
             proc_widget = self.pix4d_wnd["Pix4dProcessingWidgetClassWindow"]
             proc_widget.wait("exists", 10)
             proc_widget.click_input(coords=(138, 27))
