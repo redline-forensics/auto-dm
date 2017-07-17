@@ -331,6 +331,17 @@ class Bot(object):
             keyboard.SendKeys("{TAB 5}{ENTER}")
             keyboard.SendKeys("{HOME}{ENTER}")
 
+            # TODO: test
+            time.sleep(1)
+            self.pix4d_wnd.click_input(coords=(38, int(self.pix4d_wnd.rectangle().height()) - 64))
+            proc_opt_wnd = self.app["Processing Options"]
+            proc_opt_wnd.wait("exists", 10)
+            proc_opt_wnd.set_focus()
+            proc_opt_wnd.click_input(coords=(309, 154))
+            proc_opt_wnd.click_input(coords=(334, 179))
+            keyboard.SendKeys("^a")
+            keyboard.SendKeys("2")
+
         def stop(self):
             if self.app is not None:
                 self.app.kill_()
