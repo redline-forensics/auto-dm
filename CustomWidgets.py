@@ -1,6 +1,6 @@
 import pyttsx
 from PySide.QtCore import Qt
-from PySide.QtGui import QDialog, QProgressBar, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QWidget
+from PySide.QtGui import QDialog, QProgressBar, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QWidget, QMainWindow
 
 from Main import JobType
 
@@ -10,8 +10,6 @@ class IndefiniteProgressDialog(QDialog):
         super(IndefiniteProgressDialog, self).__init__(parent)
         self.setWindowTitle(title)
         self.message = message
-        self.setAttribute(Qt.WA_DeleteOnClose)
-        self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
 
         self.init_ui()
 
@@ -36,7 +34,6 @@ class NoLicensesDialog(QDialog):
     def __init__(self, parent=None):
         super(NoLicensesDialog, self).__init__(parent)
         self.setWindowTitle("No Licenses")
-        self.setAttribute(Qt.WA_DeleteOnClose)
         self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
 
         self.init_ui()
@@ -69,9 +66,9 @@ class NoLicensesDialog(QDialog):
         self.done(0)
 
 
-class DroneTool(QDialog):
+class DroneTool(QMainWindow):
     def __init__(self, job_type, parent=None):
-        super(DroneTool, self).__init__(parent)
+        super(DroneTool, self).__init__()
         self.job_type = job_type
         if JobType(job_type.value) is JobType.SITE:
             print("site")
@@ -79,9 +76,7 @@ class DroneTool(QDialog):
         elif JobType(job_type.value) is JobType.VEHICLE:
             print("vehicle")
             self.setWindowTitle("Drone Vehicle Tool")
-        self.setAttribute(Qt.WA_DeleteOnClose)
         self.setWindowFlags(self.windowFlags() | Qt.Tool | Qt.WindowStaysOnTopHint)
-        self.setModal(False)
         self.init_ui()
 
     def init_ui(self):
@@ -90,6 +85,7 @@ class DroneTool(QDialog):
         self.start_proc_button = QPushButton("Start Processing")
         self.edit_mosaic_button = QPushButton("Edit Mosaic")
 
+        main_widget = QWidget()
         main_layout = QVBoxLayout()
         main_tab = QTabWidget()
         manual_widget = QWidget()
@@ -101,4 +97,5 @@ class DroneTool(QDialog):
         manual_widget.setLayout(manual_layout)
         main_tab.addTab(manual_widget, "Manual")
         main_layout.addWidget(main_tab)
-        self.setLayout(main_layout)
+        main_widget.setLayout(main_layout)
+        self.setCentralWidget(main_widget)

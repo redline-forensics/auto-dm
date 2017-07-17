@@ -1,7 +1,6 @@
 import os.path
 import sys
 
-import keyboard
 from PySide.QtGui import *
 from enum import Enum
 
@@ -60,9 +59,10 @@ class MainUI(QWidget):
         Hotkeys.add_hotkey("T", ["Lcontrol", "Lwin"], self.test)
 
     def test(self):
+        self.restore_window()
         test_tab = self.add_job(4086, "N:\\J4086 Darby Trucking")
-        test_tab.run_pix4d_bot_site()
-
+        if test_tab is not None:
+            test_tab.run_pix4d_bot_site()
 
     def add_job_hotkey(self):
         self.restore_window()
@@ -207,10 +207,13 @@ class TabPage(QWidget):
 
     def __init__(self, job_num, job_dir):
         super(TabPage, self).__init__()
-
+        self.init_bots()
         self.init_ui()
         self.find_dirs(job_dir)
         self.job_num = job_num
+
+    def init_bots(self):
+        self.pix4d_bot = None
 
     def init_ui(self):
         self.create_controls()
@@ -397,6 +400,7 @@ class TabPage(QWidget):
         self.open_job_folder_button.clicked.connect(self.open_job_folder)
 
         self.pix4d_site_button.clicked.connect(self.run_pix4d_bot_site)
+        self.pix4d_site_tool_button.clicked.connect(self.show_pix4d_site_tool_window)
 
     def find_dirs(self, job_dir):
         self.job_dir = job_dir
@@ -497,7 +501,9 @@ class TabPage(QWidget):
 
     def run_pix4d_bot_site(self):
         self.pix4d_bot = Pix4DBot.Bot(self, JobType["SITE"])
-        self.pix4d_bot.start()
+
+    def show_pix4d_site_tool_window(self):
+        self.pix4d_bot = Pix4DBot.Bot(self, JobType["SITE"], standalone=True)
 
 
 if __name__ == '__main__':
