@@ -1,9 +1,11 @@
 import os.path
 import sys
 
-from PySide.QtGui import *
+from PySide.QtGui import QWidget, QSystemTrayIcon, QIcon, QApplication, QMenu, QLineEdit, QIntValidator, QPushButton, \
+    QTabWidget, QHBoxLayout, QVBoxLayout, QMessageBox, QLabel, QFileDialog, QGroupBox, QGridLayout, QDesktopServices
 from enum import Enum
 
+import Basecamp
 import Hotkeys
 import Pix4DBot
 from JobDirFinder import *
@@ -207,6 +209,7 @@ class TabPage(QWidget):
 
     def __init__(self, job_num, job_dir):
         super(TabPage, self).__init__()
+        self.basecamp_url = Basecamp.get_basecamp_page(job_num)
         self.init_bots()
         self.init_ui()
         self.find_dirs(job_dir)
@@ -252,7 +255,8 @@ class TabPage(QWidget):
         # region Job Controls
         self.open_job_folder_button = QPushButton("Open Job Folder")
         self.open_basecamp_page_button = QPushButton("Open Basecamp Page")
-        self.open_basecamp_page_button.setDisabled(True)
+        if self.basecamp_url is None:
+            self.open_basecamp_page_button.setDisabled(True)
         self.add_to_open_air_button = QPushButton("Add to Open Air")
         self.add_to_open_air_button.setDisabled(True)
         # endregion
@@ -398,6 +402,7 @@ class TabPage(QWidget):
         self.assets_folder_add_button.clicked.connect(self.create_assets_dir)
 
         self.open_job_folder_button.clicked.connect(self.open_job_folder)
+        self.open_basecamp_page_button.clicked.connect(self.open_basecamp_page)
 
         self.pix4d_site_button.clicked.connect(self.run_pix4d_bot_site)
         self.pix4d_site_tool_button.clicked.connect(self.show_pix4d_site_tool_window)
@@ -498,6 +503,9 @@ class TabPage(QWidget):
 
     def open_job_folder(self):
         QDesktopServices.openUrl(QUrl("file:{}".format(self.job_dir), QUrl.TolerantMode))
+
+    def open_basecamp_page(self):
+        QDesktopServices.openUrl(QUrl(self.basecamp_url))
 
     def run_pix4d_bot_site(self):
         self.pix4d_bot = Pix4DBot.Bot(self, JobType["SITE"])
