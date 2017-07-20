@@ -12,6 +12,7 @@ def _build_prefs_file():
 
     _add_section(_google_maps_section)
     _set(_google_maps_section, _google_maps_static_api_key_pref)
+    _set(_google_maps_section, _google_maps_js_api_key_pref)
 
 
 def _add_section(section):
