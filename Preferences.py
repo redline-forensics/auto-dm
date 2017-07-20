@@ -10,6 +10,9 @@ def _build_prefs_file():
     _set(_basecamp_section, _basecamp_email_pref)
     _set(_basecamp_section, _basecamp_password_pref)
 
+    _add_section(_google_maps_section)
+    _set(_google_maps_section, _google_maps_static_api_key_pref)
+
 
 def _add_section(section):
     _config.add_section(section)
@@ -62,6 +65,22 @@ def set_basecamp_password(password):
     _set(_basecamp_section, _basecamp_password_pref, password)
 
 
+def get_google_maps_static_api_key():
+    return _config.get(_google_maps_section, _google_maps_static_api_key_pref)
+
+
+def set_google_maps_static_api_key(api_key):
+    _set(_google_maps_section, _google_maps_static_api_key_pref, api_key)
+
+
+def get_google_maps_js_api_key():
+    return _config.get(_google_maps_section, _google_maps_js_api_key_pref)
+
+
+def set_google_maps_js_api_key(api_key):
+    _set(_google_maps_section, _google_maps_js_api_key_pref, api_key)
+
+
 # endregion
 
 
@@ -74,6 +93,10 @@ _pix4d_password_pref = "Password"
 _basecamp_section = "Basecamp"
 _basecamp_email_pref = "Email"
 _basecamp_password_pref = "Password"
+
+_google_maps_section = "Google Maps"
+_google_maps_static_api_key_pref = "Static API Key"
+_google_maps_js_api_key_pref = "JS API Key"
 
 _config = ConfigParser.SafeConfigParser()
 _successful = _config.read(_prefs_file)
