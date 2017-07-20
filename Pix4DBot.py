@@ -12,7 +12,7 @@ from pywinauto.timings import TimeoutError
 
 import Preferences
 from CustomWidgets import IndefiniteProgressDialog, NoLicensesDialog, DroneTool
-from Main import JobType
+from JobType import JobType
 
 warnings.filterwarnings("error")
 pix4d_path = os.path.expanduser("~/Documents/pix4d")
