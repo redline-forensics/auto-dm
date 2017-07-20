@@ -9,7 +9,7 @@ hotkeys = {}
 
 def add_hotkey(key, modifiers, action):
     global curr_id, hotkeys, hk
-    hotkeys[curr_id] = {"key": key, "modifiers": modifiers, "action": action}
+    hotkeys[curr_id] = {"keys": set([key] + modifiers), "action": action}
     curr_id += 1
 
 
@@ -34,15 +34,11 @@ class HotkeyRunner(QThread):
             if args.event_type != "key down":
                 return
 
-            print(str(args.current_key) + ", " + str(args.pressed_key))
+            pressed_keys = set(args.pressed_key)
 
             for hotkey in hotkeys.itervalues():
-                if args.current_key == hotkey["key"] and all(
-                                modifier in args.pressed_key for modifier in hotkey["modifiers"]):
+                if pressed_keys == hotkey["keys"]:
                     self.hk_activated.emit(hotkey["action"])
-                    print(
-                        "HOTKEY " + " + ".join(str(modifier) for modifier in hotkey["modifiers"]) + " + " + str(
-                            hotkey["key"]))
                     hk.pressed_keys = []
 
 
