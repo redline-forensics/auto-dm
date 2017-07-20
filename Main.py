@@ -3,20 +3,16 @@ import sys
 
 from PySide.QtGui import QWidget, QSystemTrayIcon, QIcon, QApplication, QMenu, QLineEdit, QIntValidator, QPushButton, \
     QTabWidget, QHBoxLayout, QVBoxLayout, QMessageBox, QLabel, QFileDialog, QGroupBox, QGridLayout, QDesktopServices
-from enum import Enum
+from JobType import JobType
 
 import Basecamp
 import Hotkeys
 import Pix4DBot
+from CustomWidgets import GoogleMapsStitcherDialog
 from JobDirFinder import *
 
 resource_path = os.path.join(os.path.split(__file__)[0], "resources")
 icon_path = os.path.join(resource_path, "icons")
-
-
-class JobType(Enum):
-    SITE = 1
-    VEHICLE = 2
 
 
 class MainUI(QWidget):
@@ -407,6 +403,8 @@ class TabPage(QWidget):
         self.pix4d_site_button.clicked.connect(self.run_pix4d_bot_site)
         self.pix4d_site_tool_button.clicked.connect(self.show_pix4d_site_tool_window)
 
+        self.google_maps_stitcher_button.clicked.connect(self.show_google_maps_stitcher)
+
     def find_dirs(self, job_dir):
         self.job_dir = job_dir
         self.find_drone_dir()
@@ -512,6 +510,10 @@ class TabPage(QWidget):
 
     def show_pix4d_site_tool_window(self):
         self.pix4d_bot = Pix4DBot.Bot(self, JobType["SITE"], standalone=True)
+
+    def show_google_maps_stitcher(self):
+        self.google_maps_stitcher_dialog = GoogleMapsStitcherDialog(self.assets_dir)
+        self.google_maps_stitcher_dialog.show()
 
 
 if __name__ == '__main__':
