@@ -34,6 +34,8 @@ class HotkeyRunner(QThread):
             if args.event_type != "key down":
                 return
 
+            print(str(args.current_key) + ", " + str(args.pressed_key))
+
             for hotkey in hotkeys.itervalues():
                 if args.current_key == hotkey["key"] and all(
                                 modifier in args.pressed_key for modifier in hotkey["modifiers"]):
@@ -41,8 +43,7 @@ class HotkeyRunner(QThread):
                     print(
                         "HOTKEY " + " + ".join(str(modifier) for modifier in hotkey["modifiers"]) + " + " + str(
                             hotkey["key"]))
-                    hk.unhook_keyboard()
-                    hk.hook()
+                    hk.pressed_keys = []
 
 
 hotkey_runner = HotkeyRunner()
