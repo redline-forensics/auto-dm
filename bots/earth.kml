@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <gx:Tour>
+        <name>FOV 35</name>
+        <gx:Playlist>
+            <gx:FlyTo>
+                <LookAt>
+                    <longitude>-80.975507</longitude>
+                    <latitude>35.140633</latitude>
+                    <altitude>600</altitude>
+                    <heading>0</heading>
+                    <tilt>0</tilt>
+                    <range>0</range>
+                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
+                    <gx:horizFov>0.0000000001</gx:horizFov>
+                </LookAt>
+            </gx:FlyTo>
+
+            <gx:Wait>
+                <gx:duration>2</gx:duration>
+            </gx:Wait>
+
+            <gx:FlyTo>
+                <LookAt>
+                    <longitude>-80.985507</longitude>
+                    <latitude>35.140633</latitude>
+                    <altitude>600</altitude>
+                    <heading>0</heading>
+                    <tilt>0</tilt>
+                    <range>0</range>
+                    <gx:altitudeMode>relativeToGround</gx:altitudeMode>
+                    <gx:horizFov>0.0000000001</gx:horizFov>
+                </LookAt>
+            </gx:FlyTo>
+        </gx:Playlist>
+    </gx:Tour>
+</kml>
