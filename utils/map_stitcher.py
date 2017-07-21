@@ -7,9 +7,9 @@ import urllib
 from PIL import Image
 from PySide.QtCore import QThread, Signal
 
-from prefs import Preferences
+from prefs import preferences
 
-api_key = Preferences.get_google_maps_static_api_key()
+api_key = preferences.get_google_maps_static_api_key()
 tile_width = 640
 tile_height = 616
 url_base = "https://maps.googleapis.com/maps/api/staticmap?maptype=satellite&center={lat},{lon}&zoom={zoom}" \

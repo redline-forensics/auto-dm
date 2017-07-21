@@ -10,9 +10,9 @@ from PySide.QtGui import QMessageBox, QProgressDialog, QFileDialog
 from pywinauto import Application, keyboard
 from pywinauto.timings import TimeoutError
 
-from gui.CustomWidgets import IndefiniteProgressDialog, NoLicensesDialog, DroneTool
-from prefs import Preferences
-from utils.JobType import JobType
+from gui.custom_widgets import IndefiniteProgressDialog, NoLicensesDialog, DroneTool
+from prefs import preferences
+from utils.job_type import JobType
 
 warnings.filterwarnings("error")
 pix4d_path = os.path.expanduser("~/Documents/pix4d")
@@ -331,13 +331,13 @@ class Pix4DLoginWorker(QThread):
     def log_in(self, log_in_window):
         log_in_window.set_focus()
 
-        email = Preferences.get_pix4d_email()
+        email = preferences.get_pix4d_email()
         if email != "":
             log_in_window.click_input(coords=(45, 170))  # Email (textbox)
             keyboard.SendKeys("^a")  # Ctrl + A
             keyboard.SendKeys(email)  # Type email
 
-        password = Preferences.get_pix4d_password()
+        password = preferences.get_pix4d_password()
         if password != "":
             log_in_window.click_input(coords=(45, 195))  # Password (textbox)
             keyboard.SendKeys("^a")

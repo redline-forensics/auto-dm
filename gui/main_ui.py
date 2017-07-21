@@ -5,11 +5,11 @@ import sys
 from PySide.QtGui import QWidget, QSystemTrayIcon, QIcon, QApplication, QMenu, QLineEdit, QIntValidator, QPushButton, \
     QTabWidget, QHBoxLayout, QVBoxLayout, QMessageBox, QLabel, QFileDialog, QGroupBox, QGridLayout, QDesktopServices
 
-from CustomWidgets import GoogleMapsStitcherDialog
-from bots import Pix4DBot
-from utils import Hotkeys, Basecamp
-from utils.JobDirFinder import *
-from utils.JobType import JobType
+from custom_widgets import GoogleMapsStitcherDialog
+from bots import pix_4d_bot
+from utils import hotkeys, basecamp
+from utils.job_dir_finder import *
+from utils.job_type import JobType
 
 resource_path = os.path.join(os.path.split(__file__)[0], "resources")
 icon_path = os.path.join(resource_path, "icons")
@@ -48,15 +48,15 @@ class MainUI(QWidget):
         self.tray_icon.setContextMenu(menu)
 
     def quit(self):
-        Hotkeys.unhook()
+        hotkeys.unhook()
         QApplication.quit()
 
     def init_hotkeys(self):
         # Format: Hotkeys.add_hotkey("J", ["Lcontrol", "Lwin"], self.woi)
-        Hotkeys.add_hotkey("J", ["Lcontrol", "Lmenu"], self.add_job_hotkey)
-        Hotkeys.add_hotkey("O", ["Lcontrol", "Lmenu"], self.restore_window)
-        Hotkeys.add_hotkey("M", ["Lcontrol", "Lmenu"], self.showMinimized)
-        Hotkeys.add_hotkey("T", ["Lcontrol", "Lmenu"], self.test)
+        hotkeys.add_hotkey("J", ["Lcontrol", "Lmenu"], self.add_job_hotkey)
+        hotkeys.add_hotkey("O", ["Lcontrol", "Lmenu"], self.restore_window)
+        hotkeys.add_hotkey("M", ["Lcontrol", "Lmenu"], self.showMinimized)
+        hotkeys.add_hotkey("T", ["Lcontrol", "Lmenu"], self.test)
 
     def test(self):
         self.restore_window()
@@ -143,7 +143,7 @@ class MainUI(QWidget):
         reply = QMessageBox.question(self, "Message", "Are you sure you want to quit?",
                                      QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            Hotkeys.unhook()
+            hotkeys.unhook()
             event.accept()
         else:
             self.tray_icon.show()
@@ -230,7 +230,7 @@ class TabPage(QWidget, object):
 
     def __init__(self, job_num, job_dir, main_window):
         super(TabPage, self).__init__()
-        self.basecamp_url = Basecamp.get_basecamp_page(job_num)
+        self.basecamp_url = basecamp.get_basecamp_page(job_num)
         self.init_bots()
         self.init_ui()
         self.find_dirs(job_dir)
@@ -552,10 +552,10 @@ class TabPage(QWidget, object):
         QDesktopServices.openUrl(QUrl(self.basecamp_url))
 
     def run_pix4d_bot_site(self):
-        self.pix4d_bot = Pix4DBot.Bot(self, JobType["SITE"])
+        self.pix4d_bot = pix_4d_bot.Bot(self, JobType["SITE"])
 
     def show_pix4d_site_tool_window(self):
-        self.pix4d_bot = Pix4DBot.Bot(self, JobType["SITE"], standalone=True)
+        self.pix4d_bot = pix_4d_bot.Bot(self, JobType["SITE"], standalone=True)
 
     def show_google_maps_stitcher(self):
         self.google_maps_stitcher_dialog = GoogleMapsStitcherDialog(self.assets_dir)

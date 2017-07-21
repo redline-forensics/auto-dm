@@ -7,9 +7,9 @@ from PySide.QtGui import QDialog, QProgressBar, QVBoxLayout, QLabel, QHBoxLayout
     QMainWindow, QLineEdit, QPushButton, QProgressDialog, QFileDialog, QMessageBox
 from PySide.QtWebKit import QWebView
 
-from prefs import Preferences
-from utils.JobType import JobType
-from utils.MapStitcher import MapStitcher, lat_to_pix, lon_to_pix, pix_to_lat, pix_to_lon
+from prefs import preferences
+from utils.job_type import JobType
+from utils.map_stitcher import MapStitcher, lat_to_pix, lon_to_pix, pix_to_lat, pix_to_lon
 
 
 class IndefiniteProgressDialog(QDialog):
@@ -134,7 +134,7 @@ class GoogleMapsStitcherDialog(QDialog):
         self.map_view = QWebView()
         with open("google_map.html", "r") as f:
             html = f.read()
-            html = html.format(api_key=Preferences.get_google_maps_js_api_key())
+            html = html.format(api_key=preferences.get_google_maps_js_api_key())
             self.map_view.setHtml(html)
         self.create_image_button = QPushButton("Create Image")
         self.create_image_button.setAutoDefault(False)

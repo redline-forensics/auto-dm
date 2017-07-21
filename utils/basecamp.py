@@ -1,13 +1,13 @@
 import json
 import urllib2
 
-from prefs import Preferences
+from prefs import preferences
 
 
 def get_basecamp_page(job_num):
     name = "J{:d}".format(job_num)
-    email = Preferences.get_basecamp_email()
-    password = Preferences.get_basecamp_password()
+    email = preferences.get_basecamp_email()
+    password = preferences.get_basecamp_password()
 
     print(email)
     print(password)
