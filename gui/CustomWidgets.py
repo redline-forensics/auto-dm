@@ -7,9 +7,9 @@ from PySide.QtGui import QDialog, QProgressBar, QVBoxLayout, QLabel, QHBoxLayout
     QMainWindow, QLineEdit, QPushButton, QProgressDialog, QFileDialog, QMessageBox
 from PySide.QtWebKit import QWebView
 
-import Preferences
-from JobType import JobType
-from MapStitcher import MapStitcher, lat_to_pix, lon_to_pix, pix_to_lat, pix_to_lon
+from prefs import Preferences
+from utils.JobType import JobType
+from utils.MapStitcher import MapStitcher, lat_to_pix, lon_to_pix, pix_to_lat, pix_to_lon
 
 
 class IndefiniteProgressDialog(QDialog):

@@ -5,12 +5,11 @@ import sys
 from PySide.QtGui import QWidget, QSystemTrayIcon, QIcon, QApplication, QMenu, QLineEdit, QIntValidator, QPushButton, \
     QTabWidget, QHBoxLayout, QVBoxLayout, QMessageBox, QLabel, QFileDialog, QGroupBox, QGridLayout, QDesktopServices
 
-import Basecamp
-import Hotkeys
-import Pix4DBot
 from CustomWidgets import GoogleMapsStitcherDialog
-from JobDirFinder import *
-from JobType import JobType
+from bots import Pix4DBot
+from utils import Hotkeys, Basecamp
+from utils.JobDirFinder import *
+from utils.JobType import JobType
 
 resource_path = os.path.join(os.path.split(__file__)[0], "resources")
 icon_path = os.path.join(resource_path, "icons")

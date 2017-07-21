@@ -7,7 +7,7 @@ import urllib
 from PIL import Image
 from PySide.QtCore import QThread, Signal
 
-import Preferences
+from prefs import Preferences
 
 api_key = Preferences.get_google_maps_static_api_key()
 tile_width = 640

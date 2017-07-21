@@ -1,7 +1,7 @@
-import urllib2
 import json
+import urllib2
 
-import Preferences
+from prefs import Preferences
 
 
 def get_basecamp_page(job_num):

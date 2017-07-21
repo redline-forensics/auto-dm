@@ -10,9 +10,9 @@ from PySide.QtGui import QMessageBox, QProgressDialog, QFileDialog
 from pywinauto import Application, keyboard
 from pywinauto.timings import TimeoutError
 
-import Preferences
-from CustomWidgets import IndefiniteProgressDialog, NoLicensesDialog, DroneTool
-from JobType import JobType
+from gui.CustomWidgets import IndefiniteProgressDialog, NoLicensesDialog, DroneTool
+from prefs import Preferences
+from utils.JobType import JobType
 
 warnings.filterwarnings("error")
 pix4d_path = os.path.expanduser("~/Documents/pix4d")
