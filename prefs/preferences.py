@@ -103,5 +103,3 @@ _config = ConfigParser.SafeConfigParser()
 _successful = _config.read(_prefs_file)
 if not _successful:
     _build_prefs_file()
-
-print(_config)
