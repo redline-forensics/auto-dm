@@ -1,18 +1,15 @@
 import os.path
 import os.path
-import sys
 
 from PySide.QtGui import QWidget, QSystemTrayIcon, QIcon, QApplication, QMenu, QLineEdit, QIntValidator, QPushButton, \
     QTabWidget, QHBoxLayout, QVBoxLayout, QMessageBox, QLabel, QFileDialog, QGroupBox, QGridLayout, QDesktopServices
 
-from custom_widgets import GoogleMapsStitcherDialog
 from bots import pix_4d_bot
+from custom_widgets import GoogleMapsStitcherDialog
 from utils import hotkeys, basecamp
 from utils.job_dir_finder import *
 from utils.job_type import JobType
-
-resource_path = os.path.join(os.path.split(__file__)[0], "resources")
-icon_path = os.path.join(resource_path, "icons")
+from resources.resource_manager import resources
 
 
 class MainUI(QWidget):
@@ -23,7 +20,7 @@ class MainUI(QWidget):
         self.init_hotkeys()
 
     def init_ui(self):
-        main_icon = QIcon(os.path.join(icon_path, "main.png"))
+        main_icon = QIcon(resources['icons']['main.png'])
         self.init_systray(main_icon)
         self.setWindowTitle("AutoDM")
         self.setWindowIcon(main_icon)
@@ -247,8 +244,8 @@ class TabPage(QWidget, object):
 
     def create_controls(self):
         # region Job Folders
-        edit_icon = QIcon(os.path.join(icon_path, "edit.png"))
-        open_icon = QIcon(os.path.join(icon_path, "open.png"))
+        edit_icon = QIcon(resources['icons']['edit.png'])
+        open_icon = QIcon(resources['icons']['open.png'])
 
         self.base_job_folder_label = QLabel("Base:")
         self.base_job_folder = QLineEdit()
@@ -276,7 +273,7 @@ class TabPage(QWidget, object):
         self.assets_folder_edit.setPlaceholderText("{} {}".format(assets_str, folder_str))
         self.assets_folder_edit_button = QPushButton(edit_icon, "")
         self.assets_folder_open_button = QPushButton(open_icon, "")
-        self.assets_folder_add_button = QPushButton(QIcon(os.path.join(icon_path, "new_dir.png")), "")
+        self.assets_folder_add_button = QPushButton(QIcon(resources['icons']['new_dir.png']), "")
         # endregion
         # region Job Controls
         self.open_job_folder_button = QPushButton("Open Job Folder")
@@ -287,7 +284,7 @@ class TabPage(QWidget, object):
         self.add_to_open_air_button.setDisabled(True)
         # endregion
 
-        tool_icon = QIcon(os.path.join(icon_path, "tool.png"))
+        tool_icon = QIcon(resources['icons']['tool.png'])
         # region SCENE
         self.scene_vehicle_button = QPushButton("Vehicle Scan")
         self.scene_vehicle_tool_button = QPushButton(tool_icon, "")
@@ -560,9 +557,3 @@ class TabPage(QWidget, object):
     def show_google_maps_stitcher(self):
         self.google_maps_stitcher_dialog = GoogleMapsStitcherDialog(self.assets_dir)
         self.google_maps_stitcher_dialog.show()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = MainUI()
-    sys.exit(app.exec_())

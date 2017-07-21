@@ -85,7 +85,7 @@ def set_google_maps_js_api_key(api_key):
 # endregion
 
 
-_prefs_file = "preferences.cfg"
+_prefs_file = "prefs/preferences.cfg"
 
 _pix4d_section = "Pix4D"
 _pix4d_email_pref = "Email"
