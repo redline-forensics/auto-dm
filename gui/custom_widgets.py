@@ -132,7 +132,7 @@ class GoogleMapsStitcherDialog(QDialog):
         self.longitude_edit = QLineEdit()
 
         self.map_view = QWebView()
-        with open("google_map.html", "r") as f:
+        with open("gui\google_map.html", "r") as f:
             html = f.read()
             html = html.format(api_key=preferences.get_google_maps_js_api_key())
             self.map_view.setHtml(html)
