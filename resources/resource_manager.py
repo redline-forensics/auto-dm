@@ -1,6 +1,14 @@
 import os
 
-_curr_dir = os.path.dirname(os.path.realpath(__file__))
+import sys
+
+if getattr(sys, "frozen", False):
+    frozen = True
+    _curr_dir = os.path.join(os.path.dirname(sys.executable), "resources")
+else:
+    frozen = False
+    _curr_dir = os.path.dirname(os.path.realpath(__file__))
+print(_curr_dir)
 resources = {}
 
 
@@ -15,23 +23,24 @@ def get_resources_dicts(path):
 
 
 for dir_name, dir_names, file_names in os.walk(_curr_dir):
-    try:
-        file_names.remove(os.path.basename(__file__))
-    except ValueError:
-        pass
+    if not frozen:
+        try:
+            file_names.remove(os.path.basename(__file__))
+        except ValueError:
+            pass
 
     resources_dicts = get_resources_dicts(dir_name)
 
     # print("### dir_names ###")
     for sub_dir_name in dir_names:
         # print("{} - {}".format(dir_name, sub_dir_name))
-        exec ("resources{dicts}[\"{curr_dir}\"] = {{}}".format(dicts=resources_dicts, curr_dir=sub_dir_name))
+        exec("resources{dicts}[\"{curr_dir}\"] = {{}}".format(dicts=resources_dicts, curr_dir=sub_dir_name))
 
     # print("### file_names ###")
     for file_name in file_names:
         # print("{} - {}".format(dir_name, file_name))
         # print(os.path.join(dir_name, file_name))
-        exec ("resources{dicts}[\"{curr_file}\"] = \"{file_path}\"".format(dicts=resources_dicts, curr_file=file_name,
-                                                                           file_path=os.path.join(dir_name,
-                                                                                                  file_name).replace(
-                                                                               "\\", "/")))
+        exec("resources{dicts}[\"{curr_file}\"] = \"{file_path}\"".format(dicts=resources_dicts, curr_file=file_name,
+                                                                          file_path=os.path.join(dir_name,
+                                                                                                 file_name).replace(
+                                                                              "\\", "/")))
