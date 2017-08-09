@@ -1,0 +1,23 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/icons8_traffic_jam_80.ico</file>
+    <file>icons/icons8-Add Folder-16.png</file>
+    <file>icons/icons8-Crashed Car-30.png</file>
+    <file>icons/icons8-Edit-16.png</file>
+    <file>icons/icons8-Folder-16.png</file>
+    <file>icons/icons8-Maintenance-16.png</file>
+    <file>icons/icons8-Map Pin-16.png</file>
+    <file>icons/icons8-Open-16.png</file>
+    <file>icons/icons8-Play-16.png</file>
+    <file>icons/icons8-Road-30.png</file>
+    <file>icons/icons8-Settings-16.png</file>
+    <file>icons/icons8-Traffic Jam-80.png</file>
+    <file>icons/loading.gif</file>
+  </qresource>
+  <qresource prefix="html">
+    <file>html/google_map.html</file>
+  </qresource>
+  <qresource prefix="kml">
+    <file>kml/earth.kml</file>
+  </qresource>
+</RCC>
