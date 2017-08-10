@@ -57,6 +57,11 @@ class MainView(QWidget):
         if curr_tab is not None:
             curr_tab.job_ctrl.open_base_folder()
 
+    def open_current_job_basecamp(self):
+        curr_tab = self.ui.jobs_tab_widget.currentWidget()
+        if curr_tab is not None:
+            curr_tab.job_ctrl.open_basecamp()
+
     def focus_window(self, reason=None):
         if reason != QSystemTrayIcon.DoubleClick and reason is not None:
             return

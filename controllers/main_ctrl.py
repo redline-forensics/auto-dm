@@ -19,6 +19,7 @@ class MainController(object):
     def init_hotkeys(self):
         self.main_model.hotkey_model.add_hotkey(["Lcontrol", "Lmenu", "J"], self.main_view.focus_job_num_edit)
         self.main_model.hotkey_model.add_hotkey(["Lcontrol", "Lmenu", "O"], self.main_view.open_current_job_folder)
+        self.main_model.hotkey_model.add_hotkey(["Lcontrol", "Lmenu", "B"], self.main_view.open_current_job_basecamp)
         self.main_model.hotkey_model.start_detection()
 
     def fetch_job(self):
