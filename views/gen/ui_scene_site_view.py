@@ -8,16 +8,16 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_scene_view(object):
-    def setupUi(self, scene_view):
-        scene_view.setObjectName("scene_view")
-        scene_view.resize(218, 415)
+class Ui_scene_site_view(object):
+    def setupUi(self, scene_site_view):
+        scene_site_view.setObjectName("scene_site_view")
+        scene_site_view.resize(218, 415)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/icons/icons8-Traffic Jam-80.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        scene_view.setWindowIcon(icon)
-        self.verticalLayout = QtWidgets.QVBoxLayout(scene_view)
+        scene_site_view.setWindowIcon(icon)
+        self.verticalLayout = QtWidgets.QVBoxLayout(scene_site_view)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.scene_tab_widget = QtWidgets.QTabWidget(scene_view)
+        self.scene_tab_widget = QtWidgets.QTabWidget(scene_site_view)
         self.scene_tab_widget.setObjectName("scene_tab_widget")
         self.manual_tab = QtWidgets.QWidget()
         self.manual_tab.setObjectName("manual_tab")
@@ -82,29 +82,29 @@ class Ui_scene_view(object):
         self.scene_tab_widget.addTab(self.auto_tab, "")
         self.verticalLayout.addWidget(self.scene_tab_widget)
 
-        self.retranslateUi(scene_view)
+        self.retranslateUi(scene_site_view)
         self.scene_tab_widget.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(scene_view)
+        QtCore.QMetaObject.connectSlotsByName(scene_site_view)
 
-    def retranslateUi(self, scene_view):
+    def retranslateUi(self, scene_site_view):
         _translate = QtCore.QCoreApplication.translate
-        scene_view.setWindowTitle(_translate("scene_view", "SCENE Tool - Site"))
-        self.new_project_btn.setText(_translate("scene_view", "Create New Project"))
-        self.import_scans_btn.setText(_translate("scene_view", "Import Scans"))
-        self.load_scans_btn.setText(_translate("scene_view", "Load Scans"))
-        self.place_scans_grp.setTitle(_translate("scene_view", "Place Scans"))
-        self.place_scans_auto_btn.setText(_translate("scene_view", "Automatic"))
-        self.place_scans_manual_btn.setText(_translate("scene_view", "Manual"))
-        self.intensity_point_cloud_btn.setText(_translate("scene_view", "Create Point Cloud"))
-        self.clipping_box_btn.setText(_translate("scene_view", "Place Clipping Box"))
-        self.intensity_ortho_btn.setText(_translate("scene_view", "Take Intensity Ortho"))
-        self.delete_point_cloud_btn.setText(_translate("scene_view", "Delete Point Cloud"))
-        self.apply_pictures_btn.setText(_translate("scene_view", "Apply Pictures"))
-        self.color_point_cloud_btn.setText(_translate("scene_view", "Create Point Cloud"))
-        self.color_ortho_btn.setText(_translate("scene_view", "Take Color Ortho"))
-        self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.manual_tab), _translate("scene_view", "Manual"))
-        self.load_place_scans_btn.setText(_translate("scene_view", "Load and Place Scans"))
-        self.take_orthos_btn.setText(_translate("scene_view", "Take Orthos"))
-        self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.auto_tab), _translate("scene_view", "Automatic"))
+        scene_site_view.setWindowTitle(_translate("scene_site_view", "SCENE Tool - Site"))
+        self.new_project_btn.setText(_translate("scene_site_view", "Create New Project"))
+        self.import_scans_btn.setText(_translate("scene_site_view", "Import Scans"))
+        self.load_scans_btn.setText(_translate("scene_site_view", "Load Scans"))
+        self.place_scans_grp.setTitle(_translate("scene_site_view", "Place Scans"))
+        self.place_scans_auto_btn.setText(_translate("scene_site_view", "Automatic"))
+        self.place_scans_manual_btn.setText(_translate("scene_site_view", "Manual"))
+        self.intensity_point_cloud_btn.setText(_translate("scene_site_view", "Create Point Cloud"))
+        self.clipping_box_btn.setText(_translate("scene_site_view", "Place Clipping Box"))
+        self.intensity_ortho_btn.setText(_translate("scene_site_view", "Take Intensity Ortho"))
+        self.delete_point_cloud_btn.setText(_translate("scene_site_view", "Delete Point Cloud"))
+        self.apply_pictures_btn.setText(_translate("scene_site_view", "Apply Pictures"))
+        self.color_point_cloud_btn.setText(_translate("scene_site_view", "Create Point Cloud"))
+        self.color_ortho_btn.setText(_translate("scene_site_view", "Take Color Ortho"))
+        self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.manual_tab), _translate("scene_site_view", "Manual"))
+        self.load_place_scans_btn.setText(_translate("scene_site_view", "Load and Place Scans"))
+        self.take_orthos_btn.setText(_translate("scene_site_view", "Take Orthos"))
+        self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.auto_tab), _translate("scene_site_view", "Automatic"))
 
-import resources_rc
+import resources.resources_rc

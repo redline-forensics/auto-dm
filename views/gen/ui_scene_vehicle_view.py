@@ -8,16 +8,16 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_scene_view(object):
-    def setupUi(self, scene_view):
-        scene_view.setObjectName("scene_view")
-        scene_view.resize(218, 357)
+class Ui_scene_vehicle_view(object):
+    def setupUi(self, scene_vehicle_view):
+        scene_vehicle_view.setObjectName("scene_vehicle_view")
+        scene_vehicle_view.resize(218, 357)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/icons/icons8-Traffic Jam-80.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        scene_view.setWindowIcon(icon)
-        self.verticalLayout = QtWidgets.QVBoxLayout(scene_view)
+        scene_vehicle_view.setWindowIcon(icon)
+        self.verticalLayout = QtWidgets.QVBoxLayout(scene_vehicle_view)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.scene_tab_widget = QtWidgets.QTabWidget(scene_view)
+        self.scene_tab_widget = QtWidgets.QTabWidget(scene_vehicle_view)
         self.scene_tab_widget.setObjectName("scene_tab_widget")
         self.manual_tab = QtWidgets.QWidget()
         self.manual_tab.setObjectName("manual_tab")
@@ -76,27 +76,27 @@ class Ui_scene_view(object):
         self.scene_tab_widget.addTab(self.auto_tab, "")
         self.verticalLayout.addWidget(self.scene_tab_widget)
 
-        self.retranslateUi(scene_view)
+        self.retranslateUi(scene_vehicle_view)
         self.scene_tab_widget.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(scene_view)
+        QtCore.QMetaObject.connectSlotsByName(scene_vehicle_view)
 
-    def retranslateUi(self, scene_view):
+    def retranslateUi(self, scene_vehicle_view):
         _translate = QtCore.QCoreApplication.translate
-        scene_view.setWindowTitle(_translate("scene_view", "SCENE Tool - Vehicle"))
-        self.new_project_btn.setText(_translate("scene_view", "Create New Project"))
-        self.import_scans_btn.setText(_translate("scene_view", "Import Scans"))
-        self.load_scans_btn.setText(_translate("scene_view", "Load Scans"))
-        self.place_scans_grp.setTitle(_translate("scene_view", "Place Scans"))
-        self.place_scans_auto_btn.setText(_translate("scene_view", "Automatic"))
-        self.place_scans_manual_btn.setText(_translate("scene_view", "Manual"))
-        self.apply_pictures_btn.setText(_translate("scene_view", "Apply Pictures"))
-        self.intensity_point_cloud_btn.setText(_translate("scene_view", "Create Point Cloud"))
-        self.clipping_box_btn.setText(_translate("scene_view", "Place Clipping Box"))
-        self.intensity_ortho_btn.setText(_translate("scene_view", "Take Normal Ortho"))
-        self.color_ortho_btn.setText(_translate("scene_view", "Take Color Ortho"))
-        self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.manual_tab), _translate("scene_view", "Manual"))
-        self.load_place_scans_btn.setText(_translate("scene_view", "Load and Place Scans"))
-        self.take_orthos_btn.setText(_translate("scene_view", "Take Orthos"))
-        self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.auto_tab), _translate("scene_view", "Automatic"))
+        scene_vehicle_view.setWindowTitle(_translate("scene_vehicle_view", "SCENE Tool - Vehicle"))
+        self.new_project_btn.setText(_translate("scene_vehicle_view", "Create New Project"))
+        self.import_scans_btn.setText(_translate("scene_vehicle_view", "Import Scans"))
+        self.load_scans_btn.setText(_translate("scene_vehicle_view", "Load Scans"))
+        self.place_scans_grp.setTitle(_translate("scene_vehicle_view", "Place Scans"))
+        self.place_scans_auto_btn.setText(_translate("scene_vehicle_view", "Automatic"))
+        self.place_scans_manual_btn.setText(_translate("scene_vehicle_view", "Manual"))
+        self.apply_pictures_btn.setText(_translate("scene_vehicle_view", "Apply Pictures"))
+        self.intensity_point_cloud_btn.setText(_translate("scene_vehicle_view", "Create Point Cloud"))
+        self.clipping_box_btn.setText(_translate("scene_vehicle_view", "Place Clipping Box"))
+        self.intensity_ortho_btn.setText(_translate("scene_vehicle_view", "Take Normal Ortho"))
+        self.color_ortho_btn.setText(_translate("scene_vehicle_view", "Take Color Ortho"))
+        self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.manual_tab), _translate("scene_vehicle_view", "Manual"))
+        self.load_place_scans_btn.setText(_translate("scene_vehicle_view", "Load and Place Scans"))
+        self.take_orthos_btn.setText(_translate("scene_vehicle_view", "Take Orthos"))
+        self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.auto_tab), _translate("scene_vehicle_view", "Automatic"))
 
-import resources_rc
+import resources.resources_rc

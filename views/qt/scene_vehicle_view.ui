@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>scene_view</class>
- <widget class="QWidget" name="scene_view">
+ <class>scene_vehicle_view</class>
+ <widget class="QWidget" name="scene_vehicle_view">
   <property name="geometry">
    <rect>
     <x>0</x>
