@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>scene_view</class>
+ <widget class="QWidget" name="scene_view">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>218</width>
+    <height>415</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>SCENE Tool - Site</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../resources/resources.qrc">
+    <normaloff>:/icons/icons/icons8-Traffic Jam-80.png</normaloff>:/icons/icons/icons8-Traffic Jam-80.png</iconset>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="scene_tab_widget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="manual_tab">
+      <attribute name="title">
+       <string>Manual</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="new_project_btn">
+         <property name="text">
+          <string>Create New Project</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="import_scans_btn">
+         <property name="text">
+          <string>Import Scans</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="load_scans_btn">
+         <property name="text">
+          <string>Load Scans</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="place_scans_grp">
+         <property name="title">
+          <string>Place Scans</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="place_scans_auto_btn">
+            <property name="text">
+             <string>Automatic</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="place_scans_manual_btn">
+            <property name="text">
+             <string>Manual</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="intensity_point_cloud_btn">
+         <property name="text">
+          <string>Create Point Cloud</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clipping_box_btn">
+         <property name="text">
+          <string>Place Clipping Box</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="intensity_ortho_btn">
+         <property name="text">
+          <string>Take Intensity Ortho</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="delete_point_cloud_btn">
+         <property name="text">
+          <string>Delete Point Cloud</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="apply_pictures_btn">
+         <property name="text">
+          <string>Apply Pictures</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="color_point_cloud_btn">
+         <property name="text">
+          <string>Create Point Cloud</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="color_ortho_btn">
+         <property name="text">
+          <string>Take Color Ortho</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="manual_spacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="auto_tab">
+      <attribute name="title">
+       <string>Automatic</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QPushButton" name="load_place_scans_btn">
+         <property name="text">
+          <string>Load and Place Scans</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="take_orthos_btn">
+         <property name="text">
+          <string>Take Orthos</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="auto_spacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>292</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resources/resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
