@@ -51,7 +51,7 @@ class JobView(QWidget):
     def __init__(self, job_ctrl):
         self.job_ctrl = job_ctrl
         super(JobView, self).__init__()
-        self.google_maps_earth_dialogs = []
+        self.dialogs = []
         self.build_ui()
 
     def build_ui(self):
@@ -86,13 +86,16 @@ class JobView(QWidget):
         self.ui.scans_folder_open_btn.clicked.connect(self.job_ctrl.open_scans_folder)
         self.ui.assets_folder_open_btn.clicked.connect(self.job_ctrl.open_assets_folder)
 
-        self.ui.google_maps_btn.clicked.connect(lambda: self.job_ctrl.open_google_maps_earth_dialog(earth=False))
-        self.ui.google_earth_btn.clicked.connect(lambda: self.job_ctrl.open_google_maps_earth_dialog(earth=True))
+        self.ui.scene_site_btn.clicked.connect(self.job_ctrl.open_scene_site_dialog)
+        self.ui.scene_vehicle_btn.clicked.connect(self.job_ctrl.open_scene_vehicle_dialog)
+
+        self.ui.google_maps_btn.clicked.connect(self.job_ctrl.open_google_maps_dialog)
+        self.ui.google_earth_btn.clicked.connect(self.job_ctrl.open_google_earth_dialog)
         self.ui.basecamp_btn.clicked.connect(self.job_ctrl.open_basecamp)
 
-    def show_google_maps_earth_dialog(self, dialog):
+    def show_dialog(self, dialog):
         dialog.show()
-        self.google_maps_earth_dialogs.append(dialog)
+        self.dialogs.append(dialog)
 
     def show_file_picker(self, starting_directory):
         return QFileDialog.getExistingDirectory(self, directory=starting_directory)

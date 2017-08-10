@@ -2,12 +2,16 @@ import os.path
 
 from controllers.google_earth_ctrl import GoogleEarthController
 from controllers.google_maps_ctrl import GoogleMapsController
+from controllers.scene_ctrl import SceneController
 from models.google_earth_model import GoogleEarthModel
 from models.google_maps_model import GoogleMapsModel
+from models.scene_model import SceneModel
 from resources.paths import dv_jobs_path
 from utils.desktop_utils import open_url, open_path
 from views.google_earth_view import GoogleEarthView
 from views.google_maps_view import GoogleMapsView
+from views.scene_site_view import SceneSiteView
+from views.scene_vehicle_view import SceneVehicleView
 
 
 class JobController(object):
@@ -100,18 +104,31 @@ class JobController(object):
 
         self.job_model.assets_folder = new_folder
 
-    def open_google_maps_earth_dialog(self, earth):
-        if earth:
-            google_earth_model = GoogleEarthModel(self.job_model.job_name, self.job_model.google_maps_js_api_key,
-                                                  self.job_model.google_earth_exe)
-            google_earth_ctrl = GoogleEarthController(google_earth_model)
-            google_maps_earth_view = GoogleEarthView(google_earth_ctrl)
-        else:
-            google_maps_model = GoogleMapsModel(self.job_model.assets_folder, self.job_model.google_maps_js_api_key,
-                                                self.job_model.google_maps_static_api_key)
-            google_maps_ctrl = GoogleMapsController(google_maps_model)
-            google_maps_earth_view = GoogleMapsView(google_maps_ctrl)
-        self.job_view.show_google_maps_earth_dialog(google_maps_earth_view)
+    def open_google_maps_dialog(self):
+        google_maps_model = GoogleMapsModel(self.job_model.assets_folder, self.job_model.google_maps_js_api_key,
+                                            self.job_model.google_maps_static_api_key)
+        google_maps_ctrl = GoogleMapsController(google_maps_model)
+        google_maps_view = GoogleMapsView(google_maps_ctrl)
+        self.job_view.show_dialog(google_maps_view)
+
+    def open_google_earth_dialog(self):
+        google_earth_model = GoogleEarthModel(self.job_model.job_name, self.job_model.google_maps_js_api_key,
+                                              self.job_model.google_earth_exe)
+        google_earth_ctrl = GoogleEarthController(google_earth_model)
+        google_earth_view = GoogleEarthView(google_earth_ctrl)
+        self.job_view.show_dialog(google_earth_view)
+
+    def open_scene_site_dialog(self):
+        scene_site_model = SceneModel()
+        scene_site_ctrl = SceneController(scene_site_model)
+        scene_site_view = SceneSiteView(scene_site_ctrl)
+        self.job_view.show_dialog(scene_site_view)
+
+    def open_scene_vehicle_dialog(self):
+        scene_vehicle_model = SceneModel()
+        scene_vehicle_ctrl = SceneController(scene_vehicle_model)
+        scene_vehicle_view = SceneVehicleView(scene_vehicle_ctrl)
+        self.job_view.show_dialog(scene_vehicle_view)
 
     def open_base_folder(self):
         open_path(self.job_model.base_folder)
