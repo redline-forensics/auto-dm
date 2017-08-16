@@ -135,12 +135,14 @@ class Ui_job_tab(object):
         self.pix4d_grp_layout.setContentsMargins(-1, 3, -1, -1)
         self.pix4d_grp_layout.setObjectName("pix4d_grp_layout")
         self.pix4d_site_btn = QtWidgets.QPushButton(self.pix4d_grp)
+        self.pix4d_site_btn.setEnabled(False)
         self.pix4d_site_btn.setText("")
         self.pix4d_site_btn.setIcon(icon2)
         self.pix4d_site_btn.setIconSize(QtCore.QSize(30, 30))
         self.pix4d_site_btn.setObjectName("pix4d_site_btn")
         self.pix4d_grp_layout.addWidget(self.pix4d_site_btn)
         self.pix4d_vehicle_btn = QtWidgets.QPushButton(self.pix4d_grp)
+        self.pix4d_vehicle_btn.setEnabled(False)
         self.pix4d_vehicle_btn.setText("")
         self.pix4d_vehicle_btn.setIcon(icon3)
         self.pix4d_vehicle_btn.setIconSize(QtCore.QSize(30, 30))
@@ -171,4 +173,4 @@ class Ui_job_tab(object):
         self.pix4d_site_btn.setToolTip(_translate("job_tab", "Site"))
         self.pix4d_vehicle_btn.setToolTip(_translate("job_tab", "Vehicle"))
 
-import resources.resources_rc
+import resources_rc

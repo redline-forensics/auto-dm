@@ -259,6 +259,9 @@
       </property>
       <item>
        <widget class="QPushButton" name="pix4d_site_btn">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
          <string>Site</string>
         </property>
@@ -279,6 +282,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="pix4d_vehicle_btn">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
          <string>Vehicle</string>
         </property>
