@@ -173,4 +173,4 @@ class Ui_job_tab(object):
         self.pix4d_site_btn.setToolTip(_translate("job_tab", "Site"))
         self.pix4d_vehicle_btn.setToolTip(_translate("job_tab", "Vehicle"))
 
-import resources_rc
+import resources.resources_rc
