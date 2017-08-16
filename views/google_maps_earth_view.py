@@ -57,7 +57,7 @@ class GoogleMapsEarthView(QWidget):
 
     def __init__(self, google_maps_earth_ctrl, parent=None):
         self.google_maps_earth_ctrl = google_maps_earth_ctrl
-        super(GoogleMapsEarthView, self).__init__(parent=parent)
+        super(GoogleMapsEarthView, self).__init__(parent=parent, flags=Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.build_ui()
 

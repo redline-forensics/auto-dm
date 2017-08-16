@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QDialog
+from PyQt5.QtCore import Qt
 
 from views.gen.ui_settings_view import Ui_settings_view
 
@@ -70,7 +71,7 @@ class SettingsView(QDialog):
 
     def __init__(self, settings_ctrl):
         self.settings_ctrl = settings_ctrl
-        super(SettingsView, self).__init__()
+        super(SettingsView, self).__init__(flags=Qt.WindowStaysOnTopHint)
 
         self.build_ui()
 
