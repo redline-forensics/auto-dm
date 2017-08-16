@@ -13,6 +13,7 @@ js_api_key = "js_api_key"
 static_api_key = "static_api_key"
 
 google_earth = "google_earth"
+scene = "scene"
 exe_path = "exe_path"
 
 
@@ -71,7 +72,7 @@ class SettingsModel(Model):
         if path is not None:
             return path
         else:
-            path = get_exe_path("Google\Google Earth Pro\client\googleearth.exe")
+            path = get_exe_path("Google\\Google Earth Pro\\client\\googleearth.exe")
             if path is not None:
                 self.google_earth_exe_path = path
                 return path
@@ -80,6 +81,22 @@ class SettingsModel(Model):
     @google_earth_exe_path.setter
     def google_earth_exe_path(self, value):
         self.settings.setValue("{}/{}".format(google_earth, exe_path), value)
+
+    @property
+    def scene_exe_path(self):
+        path = self.settings.value("{}/{}".format(scene, exe_path))
+        if path is not None:
+            return path
+        else:
+            path = get_exe_path("FARO\\SCENE\\SCENE.exe")
+            if path is not None:
+                self.scene_exe_path = path
+                return path
+        return None
+
+    @scene_exe_path.setter
+    def scene_exe_path(self, value):
+        self.settings.setValue("{}/{}".format(scene, exe_path), value)
 
     def __init__(self):
         super(SettingsModel, self).__init__()

@@ -1,3 +1,4 @@
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIntValidator, QIcon
 from PyQt5.QtWidgets import QWidget, QProgressDialog, QMessageBox, QSystemTrayIcon, QMenu, QApplication
 
@@ -13,7 +14,7 @@ class MainView(QWidget):
     def __init__(self, main_ctrl, settings_view):
         self.main_ctrl = main_ctrl
         self.settings_view = settings_view
-        super(MainView, self).__init__()
+        super(MainView, self).__init__(flags=Qt.WindowStaysOnTopHint)
         self.build_ui()
         self.init_systray()
 

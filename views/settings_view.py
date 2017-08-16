@@ -60,6 +60,14 @@ class SettingsView(QDialog):
     def google_earth_exe_path(self, value):
         self.ui.google_earth_exe_path_edit.setText(value)
 
+    @property
+    def scene_exe_path(self):
+        return self.ui.scene_exe_path_edit.text()
+
+    @scene_exe_path.setter
+    def scene_exe_path(self, value):
+        self.ui.scene_exe_path_edit.setText(value)
+
     def __init__(self, settings_ctrl):
         self.settings_ctrl = settings_ctrl
         super(SettingsView, self).__init__()
@@ -85,6 +93,7 @@ class SettingsView(QDialog):
         self.ui.google_maps_js_api_key_edit.textEdited.connect(self.settings_ctrl.settings_changed)
         self.ui.google_maps_static_api_key_edit.textEdited.connect(self.settings_ctrl.settings_changed)
         self.ui.google_earth_exe_path_edit.textEdited.connect(self.settings_ctrl.settings_changed)
+        self.ui.scene_exe_path_edit.textEdited.connect(self.settings_ctrl.settings_changed)
 
     def accept(self):
         self.settings_ctrl.apply_changes()

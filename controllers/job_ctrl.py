@@ -119,13 +119,15 @@ class JobController(object):
         self.job_view.show_dialog(google_earth_view)
 
     def open_scene_site_dialog(self):
-        scene_site_model = SceneModel()
+        scene_site_model = SceneModel(self.job_model.assets_folder, self.job_model.job_name,
+                                      self.job_model.scans_folder, self.job_model.scene_exe)
         scene_site_ctrl = SceneController(scene_site_model)
         scene_site_view = SceneSiteView(scene_site_ctrl)
         self.job_view.show_dialog(scene_site_view)
 
     def open_scene_vehicle_dialog(self):
-        scene_vehicle_model = SceneModel()
+        scene_vehicle_model = SceneModel(self.job_model.assets_folder, self.job_model.job_name,
+                                         self.job_model.scans_folder, self.job_model.scene_exe)
         scene_vehicle_ctrl = SceneController(scene_vehicle_model)
         scene_vehicle_view = SceneVehicleView(scene_vehicle_ctrl)
         self.job_view.show_dialog(scene_vehicle_view)

@@ -15,6 +15,7 @@ class SettingsController(object):
         self.settings_view.google_maps_js_api_key = self.settings_model.google_maps_js_api_key
         self.settings_view.google_maps_static_api_key = self.settings_model.google_maps_static_api_key
         self.settings_view.google_earth_exe_path = self.settings_model.google_earth_exe_path
+        self.settings_view.scene_exe_path = self.settings_model.scene_exe_path
 
     def settings_changed(self):
         self.settings_view.ui.apply_btn.setEnabled(True)
@@ -27,4 +28,5 @@ class SettingsController(object):
         self.settings_model.google_maps_js_api_key = self.settings_view.google_maps_js_api_key
         self.settings_model.google_maps_static_api_key = self.settings_view.google_maps_static_api_key
         self.settings_model.google_earth_exe_path = self.settings_view.google_earth_exe_path
+        self.settings_model.scene_exe_path = self.settings_view.scene_exe_path
         self.settings_view.ui.apply_btn.setEnabled(False)

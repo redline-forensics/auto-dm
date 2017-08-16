@@ -46,7 +46,8 @@ class MainController(object):
                        self.main_model.settings_model.basecamp_password,
                        self.main_model.settings_model.google_maps_js_api_key,
                        self.main_model.settings_model.google_maps_static_api_key,
-                       self.main_model.settings_model.google_earth_exe_path)
+                       self.main_model.settings_model.google_earth_exe_path,
+                       self.main_model.settings_model.scene_exe_path)
         self.main_model.jobs[job.job_num] = job
         found = bool(job.base_folder)
 

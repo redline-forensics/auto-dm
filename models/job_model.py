@@ -15,7 +15,7 @@ class JobModel(Model):
         return "J{:d}".format(self.job_num)
 
     def __init__(self, job_num, base_folder, basecamp_email, basecamp_password, google_maps_js_api_key,
-                 google_maps_static_api_key, google_earth_exe):
+                 google_maps_static_api_key, google_earth_exe, scene_exe):
         self.job_num = job_num
         self.base_folder = base_folder
         self.basecamp_email = basecamp_email
@@ -23,6 +23,7 @@ class JobModel(Model):
         self.google_maps_js_api_key = google_maps_js_api_key
         self.google_maps_static_api_key = google_maps_static_api_key
         self.google_earth_exe = google_earth_exe
+        self.scene_exe = scene_exe
 
         super(JobModel, self).__init__()
 
