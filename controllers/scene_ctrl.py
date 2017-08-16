@@ -36,6 +36,12 @@ class SceneController(object):
     def apply_pictures(self):
         self.scene_model.apply_pictures()
 
+    def take_intensity_ortho(self):
+        self.scene_model.take_intensity_ortho()
+
+    def take_color_ortho(self):
+        self.scene_model.take_color_ortho()
+
     def on_auto_place_scans_finished(self, success):
         if not success:
             self.scene_view.show_auto_place_scans_failed_dialog()

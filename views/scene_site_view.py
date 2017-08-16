@@ -22,3 +22,5 @@ class SceneSiteView(SceneView):
         self.ui.delete_point_cloud_btn.clicked.connect(self.scene_ctrl.delete_point_cloud)
         self.ui.clipping_box_btn.clicked.connect(self.scene_ctrl.place_clipping_box)
         self.ui.apply_pictures_btn.clicked.connect(self.scene_ctrl.apply_pictures)
+        self.ui.intensity_ortho_btn.clicked.connect(self.scene_ctrl.take_intensity_ortho)
+        self.ui.color_ortho_btn.clicked.connect(self.scene_ctrl.take_color_ortho)
