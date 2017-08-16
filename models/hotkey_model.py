@@ -41,13 +41,15 @@ class HotkeyRunner(QThread):
 
     def _on_event(self, args):
         if isinstance(args, KeyboardEvent):
+            if args.event_type == "key up":
+                self.hook.pressed_keys = list(set(self.hook.pressed_keys) - set(args.pressed_key))
             if args.event_type != "key down":
                 return
 
             pressed_keys = set(args.pressed_key)
-            print(pressed_keys)
+            print(args.event_type, pressed_keys)
 
             for hotkey in self.hotkeys:
-                if pressed_keys == hotkey["keys"]:
+                if hotkey["keys"].issubset(pressed_keys):
                     self.hk_activated.emit(hotkey["action"])
-                    self.hook.pressed_keys = []
+                    # self.hook.pressed_keys = []
