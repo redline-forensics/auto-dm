@@ -76,7 +76,7 @@ class GoogleEarthWorker(QThread):
             return int(36.6428 + 0.0344658 * width)
 
         def get_screenshot_rect():
-            map_rect = [int(item) for item in re.sub("[(LTRB)]", "", str(map_area.rectangle())).split(", ")]
+            map_rect = [int(item) for item in re.sub("[(LTRB)]", "", str(map_area.map_rectangle())).split(", ")]
             return Rectangle(map_rect[0] + 5, map_rect[1] + 5, map_rect[2] - 84,
                              map_rect[3] - max(76, get_bottom_margin(map_rect[2] - map_rect[0])))
 

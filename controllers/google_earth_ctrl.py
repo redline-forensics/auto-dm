@@ -16,7 +16,7 @@ class GoogleEarthController(GoogleMapsEarthController):
         return self.google_maps_earth_view.show_google_earth_exe_picker()
 
     def start_capturing(self):
-        point_a, point_b = self.google_maps_earth_view.rectangle
+        point_a, point_b = self.google_maps_earth_view.map_rectangle
         self.google_maps_earth_model.start_capturing(point_a, point_b, self.google_maps_earth_view.overlap,
                                                      self.google_maps_earth_view.interval)
 

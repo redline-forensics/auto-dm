@@ -16,7 +16,7 @@ class GoogleMapsController(GoogleMapsEarthController):
         super(GoogleMapsController, self).init_ui(google_maps_view)
 
     def create_image(self):
-        point_a, point_b = self.google_maps_earth_view.rectangle
+        point_a, point_b = self.google_maps_earth_view.map_rectangle
         self.google_maps_earth_model.create_image(point_a, point_b, self.google_maps_earth_view.interval)
 
     def cancel_image_create(self):
