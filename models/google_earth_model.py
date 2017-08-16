@@ -60,11 +60,7 @@ class GoogleEarthWorker(QThread):
     def run(self):
         def open_earth():
             warnings.simplefilter("ignore", UserWarning)
-            application = Application()
-            try:
-                return application.connect(path=self.exe)
-            except ProcessNotFoundError:
-                return application.start(self.exe)
+            return Application().start(self.exe)
 
         def get_main_window():
             window = app["Google Earth"]
