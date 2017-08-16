@@ -3,11 +3,12 @@ import os
 import re
 import time
 import warnings
+import win32gui
 from threading import Timer
 
+import win32con
 from PyQt5.QtCore import pyqtSignal, QThread
 from pywinauto import Application, keyboard
-from pywinauto.application import ProcessNotFoundError
 
 from models.model import Model
 from resources.paths import screenshots_path
@@ -21,13 +22,13 @@ class GoogleEarthModel(Model):
     finished_captures = pyqtSignal()
 
     def __init__(self, job_name, js_api_key, google_earth_exe):
-        self.job_name = job_name
+        self.screenshots_folder = os.path.join(screenshots_path, job_name)
         self.js_api_key = js_api_key
         self.google_earth_exe = google_earth_exe
         super(GoogleEarthModel, self).__init__()
 
     def start_capturing(self, point_a, point_b, overlap, interval):
-        self.google_earth_worker = GoogleEarthWorker(point_a, point_b, overlap, interval, self.job_name,
+        self.google_earth_worker = GoogleEarthWorker(point_a, point_b, overlap, interval, self.screenshots_folder,
                                                      self.google_earth_exe)
         self.google_earth_worker.starting_captures.connect(self.starting_captures.emit)
         self.google_earth_worker.update_progress.connect(self.update_progress.emit)
@@ -47,11 +48,11 @@ class GoogleEarthWorker(QThread):
     update_progress = pyqtSignal(int)
     finished_captures = pyqtSignal()
 
-    def __init__(self, point_a, point_b, overlap, interval, job_name, google_earth_exe):
+    def __init__(self, point_a, point_b, overlap, interval, screenshots_folder, google_earth_exe):
         self.lat, self.lon = points_to_coords(point_a, point_b)
         self.overlap = overlap
         self.interval = interval
-        self.screenshots_folder = os.path.join(screenshots_path, job_name)
+        self.screenshots_folder = screenshots_folder
         self.exe = google_earth_exe
         super(GoogleEarthWorker, self).__init__()
         self.canceled = False
@@ -76,7 +77,7 @@ class GoogleEarthWorker(QThread):
             return int(36.6428 + 0.0344658 * width)
 
         def get_screenshot_rect():
-            map_rect = [int(item) for item in re.sub("[(LTRB)]", "", str(map_area.map_rectangle())).split(", ")]
+            map_rect = [int(item) for item in re.sub("[(LTRB)]", "", str(map_area.rectangle())).split(", ")]
             return Rectangle(map_rect[0] + 5, map_rect[1] + 5, map_rect[2] - 84,
                              map_rect[3] - max(76, get_bottom_margin(map_rect[2] - map_rect[0])))
 
@@ -145,6 +146,9 @@ class GoogleEarthWorker(QThread):
 
         app = open_earth()
         main_window = get_main_window()
+        pos = main_window.client_rect()
+        win32gui.SetWindowPos(main_window.handle, win32con.HWND_TOPMOST, pos.left, pos.top, pos.width(), pos.height(),
+                              0)
         map_area = get_map_area()
         screenshot_rect = get_screenshot_rect()
 
@@ -188,6 +192,9 @@ class GoogleEarthWorker(QThread):
         while time.time() < end_time:
             if self.canceled:
                 return
+        time.sleep(2)
+        app.kill()
+        time.sleep(2)
         self.finished_captures.emit()
 
     def cancel(self):
