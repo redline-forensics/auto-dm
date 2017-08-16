@@ -1,4 +1,5 @@
 from controllers.google_maps_earth_ctrl import GoogleMapsEarthController
+from utils.desktop_utils import open_path
 
 
 class GoogleEarthController(GoogleMapsEarthController):
@@ -31,3 +32,4 @@ class GoogleEarthController(GoogleMapsEarthController):
 
     def on_finished_captures(self):
         self.google_maps_earth_view.close_capture_progress_dialog()
+        open_path(self.google_maps_earth_model.screenshots_folder)
