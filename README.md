@@ -56,4 +56,4 @@ Jake Cheek - [@jgchk](https://github.com/jgchk)
 
 #### License
 
-MIT
+GPL
