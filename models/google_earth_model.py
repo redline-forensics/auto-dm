@@ -64,7 +64,7 @@ class GoogleEarthWorker(QThread):
             return Application().start(self.exe)
 
         def get_main_window():
-            window = app["Google Earth"]
+            window = self.app["Google Earth"]
             window.wait("visible", 30)
             return window
 
@@ -126,7 +126,7 @@ class GoogleEarthWorker(QThread):
                 [int(item) for item in re.sub("[(LTRB)]", "", str(map_area.client_rect())).split(", ")][3] - 68)
             )
             keyboard.SendKeys("^o")
-            open_dialog = app["Open"]
+            open_dialog = self.app["Open"]
             open_dialog.wait("visible", 30)
             open_dialog.set_focus()
             keyboard.SendKeys(kml_file.replace("/", "\\"), pause=0)
@@ -144,7 +144,7 @@ class GoogleEarthWorker(QThread):
             if time.time() < end_time:
                 self.update_progress.emit(time.time())
 
-        app = open_earth()
+        self.app = open_earth()
         main_window = get_main_window()
         pos = main_window.client_rect()
         win32gui.SetWindowPos(main_window.handle, win32con.HWND_TOPMOST, pos.left, pos.top, pos.width(), pos.height(),
@@ -193,7 +193,7 @@ class GoogleEarthWorker(QThread):
             if self.canceled:
                 return
         time.sleep(2)
-        app.kill()
+        self.app.kill()
         time.sleep(2)
         self.finished_captures.emit()
 
@@ -202,6 +202,8 @@ class GoogleEarthWorker(QThread):
         for timer in self.timers:
             if timer is not None:
                 timer.cancel()
+        if self.app:
+            self.app.kill()
 
 
 class Rectangle(object):

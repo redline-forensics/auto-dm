@@ -82,6 +82,9 @@ class GoogleMapsStitcher(QThread):
         for i in range(num_tiles_width):
             lon = self.pix_to_lon(i)
             for j in range(num_tiles_height):
+                if self.canceled:
+                    return
+
                 cur_tile += 1
                 self.update_progress.emit(cur_tile)
 

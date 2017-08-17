@@ -116,6 +116,7 @@ class JobController(object):
                                               self.job_model.google_earth_exe)
         google_earth_ctrl = GoogleEarthController(google_earth_model)
         google_earth_view = GoogleEarthView(google_earth_ctrl)
+        google_earth_view.request_minimize.connect(self.job_view.minimize)
         self.job_view.show_dialog(google_earth_view)
 
     def open_scene_site_dialog(self):

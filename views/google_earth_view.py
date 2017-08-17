@@ -1,6 +1,7 @@
 import os
 
 from PyQt5.QtWidgets import QProgressDialog, QFileDialog
+from PyQt5.QtCore import pyqtSignal
 
 from utils.time_utils import convert_seconds
 from views.google_maps_earth_view import GoogleMapsEarthView
@@ -9,6 +10,8 @@ default_interval = 5.0
 
 
 class GoogleEarthView(GoogleMapsEarthView):
+    request_minimize = pyqtSignal()
+
     def build_ui(self):
         super(GoogleEarthView, self).build_ui()
 
@@ -40,3 +43,7 @@ class GoogleEarthView(GoogleMapsEarthView):
     def close_capture_progress_dialog(self):
         self.capture_progress_dialog.hide()
         self.capture_progress_dialog.deleteLater()
+
+    def minimize(self):
+        self.hide()
+        self.request_minimize.emit()

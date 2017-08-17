@@ -20,6 +20,7 @@ class GoogleEarthController(GoogleMapsEarthController):
         point_a, point_b = self.google_maps_earth_view.map_rectangle
         self.google_maps_earth_model.start_capturing(point_a, point_b, self.google_maps_earth_view.overlap,
                                                      self.google_maps_earth_view.interval)
+        self.google_maps_earth_view.minimize()
 
     def cancel_captures(self):
         self.google_maps_earth_model.cancel_captures()
