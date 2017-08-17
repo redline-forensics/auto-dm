@@ -134,15 +134,20 @@ class JobController(object):
 
     def open_base_folder(self):
         open_path(self.job_model.base_folder)
+        self.job_view.minimize()
 
     def open_drone_folder(self):
         open_path(self.job_model.drone_folder)
+        self.job_view.minimize()
 
     def open_scans_folder(self):
         open_path(self.job_model.scans_folder)
+        self.job_view.minimize()
 
     def open_assets_folder(self):
         open_path(self.job_model.assets_folder)
+        self.job_view.minimize()
 
     def open_basecamp(self):
         open_url(self.job_model.basecamp_url)
+        self.job_view.minimize()

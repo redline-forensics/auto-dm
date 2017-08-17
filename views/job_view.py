@@ -2,6 +2,7 @@ import os.path
 
 from PyQt5.QtGui import QMovie
 from PyQt5.QtWidgets import QWidget, QFileDialog, QMessageBox
+from PyQt5.QtCore import pyqtSignal
 
 from custom_widgets.animated_button import AnimatedButton
 from resources.resource_manager import resources
@@ -47,6 +48,8 @@ class JobView(QWidget):
         self.ui.assets_folder_edit.setText(value)
 
     # endregion
+
+    request_minimize = pyqtSignal()
 
     def __init__(self, job_ctrl):
         self.job_ctrl = job_ctrl
@@ -108,3 +111,6 @@ class JobView(QWidget):
         response = QMessageBox.question(self, "Update Folders", "Would you like to update the other job folders?",
                                         QMessageBox.Yes, QMessageBox.No)
         return response == QMessageBox.Yes
+
+    def minimize(self):
+        self.request_minimize.emit()

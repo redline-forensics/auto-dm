@@ -58,6 +58,7 @@ class MainController(object):
             if not open_anyway:
                 return
         job_view = JobView(JobController(job))
+        job_view.request_minimize.connect(self.main_view.close)
         self.main_view.add_tab(job_view, job.job_name)
 
     def remove_job(self, index):
