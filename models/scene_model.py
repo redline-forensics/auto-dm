@@ -155,6 +155,14 @@ class SceneModel(Model):
     def take_color_ortho(self):
         self.take_ortho("Color")
 
+    @queued
+    def take_side_intensity_ortho(self):
+        self.take_ortho("Side_Intensity")
+
+    @queued
+    def take_side_color_ortho(self):
+        self.take_ortho("Side_Color")
+
     def take_ortho(self, type):
         ortho_dlg = self.get_ortho_dialog()
         ortho_dlg["Edit1"].set_edit_text("200" if self.vehicle_name else "20")

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'views/qt/scene_vehicle_view.ui'
+# Form implementation generated from reading ui file 'qt/scene_vehicle_view.ui'
 #
 # Created by: PyQt5 UI code generator 5.9
 #
@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_scene_vehicle_view(object):
     def setupUi(self, scene_vehicle_view):
         scene_vehicle_view.setObjectName("scene_vehicle_view")
-        scene_vehicle_view.resize(218, 357)
+        scene_vehicle_view.resize(218, 415)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/icons/icons8-Traffic Jam-80.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         scene_vehicle_view.setWindowIcon(icon)
@@ -58,6 +58,12 @@ class Ui_scene_vehicle_view(object):
         self.color_ortho_btn = QtWidgets.QPushButton(self.manual_tab)
         self.color_ortho_btn.setObjectName("color_ortho_btn")
         self.verticalLayout_2.addWidget(self.color_ortho_btn)
+        self.side_intensity_ortho_btn = QtWidgets.QPushButton(self.manual_tab)
+        self.side_intensity_ortho_btn.setObjectName("side_intensity_ortho_btn")
+        self.verticalLayout_2.addWidget(self.side_intensity_ortho_btn)
+        self.side_color_ortho_btn = QtWidgets.QPushButton(self.manual_tab)
+        self.side_color_ortho_btn.setObjectName("side_color_ortho_btn")
+        self.verticalLayout_2.addWidget(self.side_color_ortho_btn)
         spacerItem = QtWidgets.QSpacerItem(20, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem)
         self.scene_tab_widget.addTab(self.manual_tab, "")
@@ -92,8 +98,10 @@ class Ui_scene_vehicle_view(object):
         self.apply_pictures_btn.setText(_translate("scene_vehicle_view", "Apply Pictures"))
         self.intensity_point_cloud_btn.setText(_translate("scene_vehicle_view", "Create Point Cloud"))
         self.clipping_box_btn.setText(_translate("scene_vehicle_view", "Place Clipping Box"))
-        self.intensity_ortho_btn.setText(_translate("scene_vehicle_view", "Take Normal Ortho"))
-        self.color_ortho_btn.setText(_translate("scene_vehicle_view", "Take Color Ortho"))
+        self.intensity_ortho_btn.setText(_translate("scene_vehicle_view", "Take Top Ortho"))
+        self.color_ortho_btn.setText(_translate("scene_vehicle_view", "Take Top Color Ortho"))
+        self.side_intensity_ortho_btn.setText(_translate("scene_vehicle_view", "Take Side Ortho"))
+        self.side_color_ortho_btn.setText(_translate("scene_vehicle_view", "Take Side Color Ortho"))
         self.scene_tab_widget.setTabText(self.scene_tab_widget.indexOf(self.manual_tab), _translate("scene_vehicle_view", "Manual"))
         self.load_place_scans_btn.setText(_translate("scene_vehicle_view", "Load and Place Scans"))
         self.take_orthos_btn.setText(_translate("scene_vehicle_view", "Take Orthos"))

@@ -22,3 +22,5 @@ class SceneVehicleView(SceneView):
         self.ui.clipping_box_btn.clicked.connect(self.scene_ctrl.place_clipping_box)
         self.ui.intensity_ortho_btn.clicked.connect(self.scene_ctrl.take_intensity_ortho)
         self.ui.color_ortho_btn.clicked.connect(self.scene_ctrl.take_color_ortho)
+        self.ui.side_intensity_ortho_btn.clicked.connect(self.scene_ctrl.take_side_intensity_ortho)
+        self.ui.side_color_ortho_btn.clicked.connect(self.scene_ctrl.take_side_color_ortho)
