@@ -135,7 +135,7 @@ class GoogleEarthWorker(QThread):
 
         def screenshot(lat, lon):
             if not os.path.isdir(self.screenshots_folder):
-                os.mkdir(self.screenshots_folder)
+                os.makedirs(self.screenshots_folder, exist_ok=True)
             file_name = "{}_{}.jpg".format(lat, lon)
             map_area.set_focus()
             print(lat, lon)
