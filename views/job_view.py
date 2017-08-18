@@ -1,7 +1,7 @@
 import os.path
 
 from PyQt5.QtGui import QMovie
-from PyQt5.QtWidgets import QWidget, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QWidget, QFileDialog, QMessageBox, QInputDialog
 from PyQt5.QtCore import pyqtSignal
 
 from custom_widgets.animated_button import AnimatedButton
@@ -114,3 +114,8 @@ class JobView(QWidget):
 
     def minimize(self):
         self.request_minimize.emit()
+
+    def show_vehicle_name_input_dialog(self):
+        text, ok = QInputDialog.getText(self, "Vehicle Name", "Enter vehicle name:")
+        if ok:
+            return text

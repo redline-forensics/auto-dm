@@ -127,8 +127,12 @@ class JobController(object):
         self.job_view.show_dialog(scene_site_view)
 
     def open_scene_vehicle_dialog(self):
+        self.open_scans_folder()
+        vehicle_name = self.job_view.show_vehicle_name_input_dialog()
+        if not vehicle_name:
+            return
         scene_vehicle_model = SceneModel(self.job_model.assets_folder, self.job_model.job_name,
-                                         self.job_model.scans_folder, self.job_model.scene_exe)
+                                         self.job_model.scans_folder, self.job_model.scene_exe, vehicle_name)
         scene_vehicle_ctrl = SceneController(scene_vehicle_model)
         scene_vehicle_view = SceneVehicleView(scene_vehicle_ctrl)
         self.job_view.show_dialog(scene_vehicle_view)
