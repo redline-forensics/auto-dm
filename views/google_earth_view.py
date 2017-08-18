@@ -32,7 +32,7 @@ class GoogleEarthView(GoogleMapsEarthView):
         self.capture_progress_dialog.setWindowTitle("Capturing...")
         self.capture_progress_dialog.setModal(True)
         self.capture_progress_dialog.canceled.connect(self.google_maps_earth_ctrl.cancel_captures)
-        self.capture_progress_dialog.show()
+        self.capture_progress_dialog.showMinimized()
 
     def update_capture_progress_dialog(self, progress):
         hours, minutes, seconds = convert_seconds(self.capture_progress_dialog.maximum() - progress)
