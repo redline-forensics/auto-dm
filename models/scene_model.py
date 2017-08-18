@@ -157,14 +157,16 @@ class SceneModel(Model):
 
     def take_ortho(self, type):
         ortho_dlg = self.get_ortho_dialog()
-        ortho_dlg["Edit1"].set_edit_text(200 if self.vehicle_name else 20)
+        ortho_dlg["Edit1"].set_edit_text("200" if self.vehicle_name else "20")
         ortho_dlg["ComboBox1"].select("Imperial Units")
         ortho_dlg["Show scale"].check()
+        time.sleep(1)
         ortho_dlg["Create Orthophoto"].click()
 
         save_dlg = self.application["Save As"]
         ortho_name = "{}_Ortho_{}".format(self.proj_name, type)
         save_dlg["Edit1"].set_edit_text(os.path.join(self.assets_folder, ortho_name))
+        time.sleep(1)
         save_dlg["Save"].click()
 
         ortho_progress_dlg = self.application["Creating Orthophoto..."]
@@ -174,6 +176,7 @@ class SceneModel(Model):
         self.main_window["Orthophoto Toolbar"].button(0).click()
         ortho_dlg = self.application["Create Orthophoto"]
         ortho_dlg.wait("visible")
+        return ortho_dlg
 
     def get_scans_menu(self):
         tree_view = self.main_window["TreeView"]
@@ -206,7 +209,10 @@ class SceneWorker(QThread):
                 continue
 
             fn = self.queue.get()
-            fn()
+            try:
+                fn()
+            except Exception as e:
+                print(e)
 
     def quit(self):
         self.running = False
